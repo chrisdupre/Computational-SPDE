@@ -38,10 +38,12 @@
 \begin{exer}
 For a bounded domain $D$, prove that $C\left(\overline{D}\right)$ is complete with respect to the supremum
 norm $\|u\|_{\infty} = \sup_{x \in D} \abs{u(x)}$. By constructing a suitable Cauchy sequence, show that
-$C(D)$ is not complete with respect to the $L^{2}(D)$ norm. 
+$C\left(\overline{D}\right)$ is not complete with respect to the $L^{2}(D)$ norm. 
 \end{exer}
 \begin{proof}
-    Note that as $D$ is bounded, so is $\overline{D}$
+    Suppose that $f_k$ is a Cauchy sequence with respect to the $\|\cdot\|_{\infty}$ norm. Let $x_m$ be a dense set of points in $\overline{D}$. It is clear by the completeness of $\R$ that $\lim_{k\to \infty} f_k(x_m)$ exists.
+    \par 
+    Define a function on the dense set by $f(x_m) = \lim_{k\to\infty} f_k (x_m).$
 \end{proof}
 
 \printbibliography
