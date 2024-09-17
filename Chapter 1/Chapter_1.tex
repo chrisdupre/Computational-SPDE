@@ -79,7 +79,6 @@ Note that $f= g$ a.s. implies that there exists a measurable null set $N$ such t
 \par To see that completeness is neccesary. Consider $X = \{1,2,3\}, \mathcal{F} = \{\empty,\{1\},\{2,3\},\{1,2,3\}\}$ with $\mu\left(\{1\}\right) = 1, \mu\left(\{2\}\right)=\mu\left(\{3\}\right).$ Let $f$ be defined as $f(1) = f(2) = 0, f(3) = 0$ and $g(1)=g(3) = 1, g(2) = 0$. Note that $f = g$ a.s. with $N = \{2,3\}$ and $f$ is measureable but $g$ is not.  
 \end{proof}
 
-
 $$\int_{X} \|u(x)\|_{Y} dx < \infty.$$
 \begin{exer}
    Using Definition 1.2.1 in \cite{lord2014introduction}, prove that if $u:X\to Y$ is integrable then 
@@ -89,9 +88,29 @@ $$\int_{X} \|u(x)\|_{Y} dx < \infty.$$
     Note that 
     \begin{align*}
         \int_{X} \|u(x)\|_{Y} dx &\leq \int_{X} \|u(x)-u_k(x)\|_{Y} dx + \int_{X} \|u_k(x)\|_{Y} dx \\
-        & = \int_{X} \lim_{m\to \infty} \|u_m(x)-u_k(x)\|_{Y} dx + \int_{X} \|u_k(x)\|_{Y} dx .
+        & = \int_{X} \lim_{m\to \infty} \|u_m(x)-u_k(x)\|_{Y} dx + \int_{X} \|u_k(x)\|_{Y} dx \\
+        & \leq \liminf_{m}\int_{X} \|u_m(x)-u_k(x)\|_{Y} dx+ \int_{X} \|u_k(x)\|_{Y} dx.
     \end{align*}
-    For $k$ sufficiently large and $m$ sufficiently large, it is clear that 
+    The last inequality follows by Fatou's lemma. 
+    For $k$ sufficiently large , the first term is bounded by $1$ by Definition 1.2.1. By the definition of simple functions, the second is also bounded. Thus the term on the left is bounded as well.
+\end{proof}
+
+\begin{exer}
+\tcr{Newline}
+    \begin{enumerate}[label=\alph*.]
+        \item If $u:\R\to\R$ is measurable, define simple functions $u_n$ such that $u_n(x) \to u(x)$ for all $x\in\R.$
+        \item If $G\in C\left(\R\times \R\right)$, define simple functions of the form
+        $$\sum_{j,k=1}^{N} G(x_j,x_k)\mathbf{1}_{\mathcal{F}_j}\mathbf{1}_{\mathcal{F}_k}$$
+        for $x_j\in\R, F_j \in \mathcal{B}\left(\R\right)$, such that $G_j\to G$ point-wise as $N\to \infty.$
+    \end{enumerate}
+\end{exer}
+\begin{proof}\tcr{Somehow}
+    \begin{enumerate}[label=\alph*.]
+        \item Define $\mathcal{F}_{j}^{n} = u^{-1}\left(\left[\frac{j}{n},\frac{j+1}{n}\right)\right)\cap\left[-n,n\right], -n^2 \leq j \leq n^2$ and define:
+        $$u_n(x) = \sum_{j=-n^2}^{n^2} \frac{j}{n}\mathbf{1}_{\mathcal{F}_{j}^{n}}.$$
+        It is clear this function is simple as each set is clearly measurable and $\mu\left(\mathcal{F}_j^n\right)\leq 2n$. Consider $x\in \R$. Then for $n\geq \lceil \abs{x}\rceil$, we have that $\abs{u(x)-u_{n}(x)}\leq \frac{1}{n}$ and thus it converges point-wise.
+        \item
+    \end{enumerate}
 \end{proof}
 
 \printbibliography
