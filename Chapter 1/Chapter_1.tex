@@ -109,8 +109,91 @@ $$\int_{X} \|u(x)\|_{Y} dx < \infty.$$
         \item Define $\mathcal{F}_{j}^{n} = u^{-1}\left(\left[\frac{j}{n},\frac{j+1}{n}\right)\right)\cap\left[-n,n\right], -n^2 \leq j \leq n^2$ and define:
         $$u_n(x) = \sum_{j=-n^2}^{n^2} \frac{j}{n}\mathbf{1}_{\mathcal{F}_{j}^{n}}.$$
         It is clear this function is simple as each set is clearly measurable and $\mu\left(\mathcal{F}_j^n\right)\leq 2n$. Consider $x\in \R$. Then for $n\geq \lceil \abs{x}\rceil$, we have that $\abs{u(x)-u_{n}(x)}\leq \frac{1}{n}$ and thus it converges point-wise.
-        \item
+        \item Let $F_j^n = \left[\frac{j}{n},\frac{j+1}{n}\right), -n^2 \leq j \leq n^2$ and define 
+        $$G_n(x,y) = \sum_{j=-n^2}^{n^2}\sum_{k=-n^2}^{n^2} G\left(\frac{j+1/2}{n},\frac{k+1/2}{n}\right)\mathbf{1}_{F_j^n}(x)\mathbf{1}_{F_k^n}(y).$$
+        To see point-wise convergence, fix $(x,y) \in \R\times\R.$ As $G$ is continuous, for every $\varepsilon>0$ there exists an $N$ large enough such that if $(x_1,y_1)$ and $(x_2,y_2)$ are less than $\frac{1}{\sqrt{2}N}$ apart then $\abs{G(x_1,y_1)-G(x_2,y_2)}\leq \varepsilon$. For each such $\varepsilon$, pick $n \geq \max\{\lceil \abs{x}\rceil, \lceil \abs{y} \rceil, N\}.$ We then claim that $\abs{G_n(x,y)-G(x,y)}\leq \varepsilon.$ This is because every point is shifted to another point at most $\frac{1}{\sqrt{2}N}$ away, which is chose so that the difference is less than $\varepsilon.$
     \end{enumerate}
+\end{proof}
+
+\begin{exer}
+    Give an example of a Lebesgue integrable function $u : R \to R$ that is not Riemann integrable.
+\end{exer}
+\begin{proof}
+Let $f$ be defined as 
+$$f(x) = \begin{cases}
+    1 & x\in \Q\\
+    0& \text{else}.
+\end{cases}$$
+It is clear that $f$ is Lebesgue integrable and that in fact $\int \abs{f}dx = 0.$ However, we claim $f$ is not integrable. This is because the function is not of finite variation. This can be seen by taking the sequence of partitions $\pi_n=\cup_{j=0}^{n-1} \left[\frac{j}{n}, \frac{j+\pi/4}{n}\right) \cup \left[\frac{j+\pi/4}{n},\frac{j+1}{n}\right)$. The variation at each level in this partition is clearly $2n$ and is thus unbounded. 
+\end{proof}
+
+\begin{exer}
+    By introducing a measure on $\Z$, show that 
+    $$\lim_{n\to \infty} \sum_{j\in \Z} u_{n,j} \to \sum_{j\in \Z} u_{j}$$
+    if $\lim_{n\to\infty} u_{n,j} = u_{j}$ and such that $\abs{u_{n,j}} \leq U_{j}$ for some $U_j$ such that $\sum_{j\in\Z} U_j < \infty.$
+\end{exer}
+\begin{proof}
+    Take the counting measure, where $c(A) = \abs{A}$ where $A\subset \Z$ and $\abs{A}$ is the sets cardinality. The result now follows by Lebesgue dominated convergence theorem. 
+\end{proof}
+
+\begin{exer}
+    Evaluate
+    $$\int_{0}^{b}\int_{0}^a f(x,y) dx dy , \int_{0}^{a}\int_{0}^{b} f(x,y) dy dx.$$
+    Where 
+    $$f(x,y) = \begin{cases}
+        \frac{xy\left(y^2-x^2\right)}{\left(x^2+y^2\right)^3}  & (x,y) \neq (0,0)\\
+        0 & (x,y) = (0,0).
+    \end{cases}$$
+    Why does Fubini's theorem \textit{not} apply?
+\end{exer}
+\begin{proof}
+    For the computations, we have
+    \begin{align*}
+        \int_{0}^{b}\int_{0}^a f(x,y) dx dy &= \int_{0}^b \left[\frac{1}{2}\frac{x^2y}{\left(x^2+y^2\right)^2}\right]_{x=0}^{x=a} dy\\
+        &= \frac{1}{2}\int_{0}^b \frac{a^2 y}{\left(a^2+y^2\right)^2} dy\\
+        &= \frac{-1}{4}\left[\frac{a^2}{a^2+y^2}\right]_{y=0}^{y=b}\\
+        &= \frac{1}{4}\left[1-\frac{a^2}{a^2+b^2}\right]=\frac{b^2}{4\left(a^2+b^2\right)}\\
+        \int_{0}^{a}\int_{0}^b f(x,y) dy dx &= \int_{0}^b \left[\frac{-1}{2}\frac{xy^2}{\left(x^2+y^2\right)^2}\right]_{y=0}^{y=b} dx\\
+        &= \frac{-1}{2}\int_{0}^a \frac{b^2 x}{\left(b^2+x^2\right)^2} dx\\
+        &= \frac{-1}{4}\left[\frac{b^2}{b^2+x^2}\right]_{x=0}^{x=a}\\
+        &= \frac{1}{4}\left[1-\frac{b^2}{a^2+b^2}\right]=\frac{a^2}{4\left(a^2+b^2\right)}.
+    \end{align*}
+    The reason Fubini's does not imply is it is not absolutely integrable. In fact, in polar coordinates the function takes the form $f(r,\theta) = \frac{\sin(4\theta)}{4r^2}.$ Therefore, any cone about $\theta=\pi/8+n*\pi/4, n\in\Z$ will show exactly this problem.
+\end{proof}
+
+\begin{exer}
+    Using Fubini's theorem, prove that 
+    $$\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} e^{-\frac{x^2}{2}}dx = 1.$$
+\end{exer}
+\begin{proof}
+Formally multiplying this integral with itself gives 
+$$\frac{1}{2\pi}\int_{\R^2} e^{-\frac{x^2+y^2}{2}} dx dy$$.
+As this function is non negative, we can show that if it is integrable, it is absolutely integrable. Transferring to polar coordinates gives
+$$\frac{1}{2\pi}\int_{r=0}^{\infty}\int_{\theta=0}^{2\pi} e^{-\frac{r^2}{2}} r dr d\theta = 1.$$
+Thus the function is integrable and its square is 1. As the function is non-negative, the integral must be 1.   
+\end{proof}
+
+\begin{exer}
+    
+\end{exer}
+\begin{proof}
+    
+\end{proof}
+
+\begin{exer}
+    On a real Hilbert space $H$, prove the Cauchy–Schwarz inequality $\abs{\langle u, v\rangle}\leq \|u\|\|v\|$ for $u,v\in H.$
+\end{exer}
+\begin{proof}
+If both $u = 0$ and $v= 0$, the statment is trivial. Assume without loss $v \neq 0$. Consider $f(\alpha) = \|u+\alpha v\|^2.$ Taking the derivative with respect to $\alpha$ gives $\frac{df}{d\alpha} = -2\langle u,v\rangle + 2\alpha \|v\|_{2}^{2}.$ Seeking an critical point gives $\alpha = \frac{\langle u,v\rangle}{\|v\|^2}.$ Evaluating at this critical point gives 
+$$0\leq \|u+\alpha v\|^2 = \|u\|^2 - 2\frac{\langle u,v\rangle^2}{\|v\|^2}+\frac{\langle u,v\rangle^2}{\|v\|^2} = \|u\|^2 - \frac{\langle u,v\rangle^2}{\|v\|^2}.$$
+Rearranging and taking the square root of both sides gives the Cauchy-Schwarz inequality.
+\end{proof}
+
+\begin{exer}
+    
+\end{exer}
+\begin{proof}
+    
 \end{proof}
 
 \printbibliography
