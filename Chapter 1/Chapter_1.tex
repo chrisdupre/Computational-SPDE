@@ -174,10 +174,16 @@ Thus the function is integrable and its square is 1. As the function is non-nega
 \end{proof}
 
 \begin{exer}
-    
+    For $f\in C^1\left( [0,1] \right)$ and $p\geq 1$, prove that
+    $$\left(\int_0^1 \abs{f(x)} dx\right)^p \leq \int_0^1 \abs{f(x)}^p dx$$
+    This is a version of Jensen's inequality. For $a<b$, show that $L^q (a,b)\subset L^p(a,b)$ for $1\laq p \leq q.$
 \end{exer}
 \begin{proof}
-    
+By H\"older's inequality
+$$\int_0^1 \abs{f(x)}\times 1 dx \leq \left(\int_0^1 \abs{f(x)}^p\right)^{1/p} \left( \int_0^1 dx\right)^{1/q} = \left(\int_0^1 \abs{f(x)}^p\right)^{1/p}.$$ 
+Raise both sides to the $p$ power to obtain the desired inequality. Let $1\leq p\leq q$. Let $r = \frac{q}{p}.$ Applying the above procedure with $r$ gives
+$$\int_a^b \abs{f(x)}^p\times 1 dx \leq \left(\int_a^b \abs{f(x)}^q\right)^{1/r} \left( \int_a^b dx\right)^{1-1/r} = \left(\int_0^1 \abs{f(x)}^p\right)^{p/q} \left(b-a\right)^{\frac{q-p}{q}}.$$
+Raising both side to $1/p$ bounds the left hand side by a constant multiple of the right hand side. Thus if $f\in L^q$, $f\in L^p$ or $L^q([a,b]) \subset L^p([a,b]).$
 \end{proof}
 
 \begin{exer}
@@ -190,10 +196,49 @@ Rearranging and taking the square root of both sides gives the Cauchy-Schwarz in
 \end{proof}
 
 \begin{exer}
-    
+    Prove that $(1.12)$ is the weak derivative of $(1.11)$  (by showing that $(1.13)$ holds) (Equations on p. 12 of \cite{lord2014introduction}) and that $\mathcal{D}u$ does not have a weak derivative in the set of measurable functions $u:\R\to\R.$
 \end{exer}
 \begin{proof}
-    
+Assume by density that $\phi \in C^\infty_c(\R).$
+    \begin{align*}
+        \int_\R \mathcal{D}u(x) \phi(x) dx &= \int_{0}^\infty \phi(x) dx \\
+        &= -\int_{0}^\infty x\phi'(x)dx = -\int_{\R} u(x)\phi'(x) dx. 
+    \end{align*}
+\end{proof}
+
+\begin{exer}
+    \begin{enumerate}[label=\alph*.]
+        \item Let $u(r) = \log\left(\abs{\log(r)}\right)$ for $r> 0$. Sketch a graph of $u(r)$ and $u'(r).$ Show that $u\in L^2\left(\left[0,\frac{1}{2}\right]\right)$ but $u\not \in C\left(\left[0,\frac{1}{2}\right]\right)$ and $u' \not \in L^2\left(\left[0,\frac{1}{2}\right]\right)$
+        \item
+    \end{enumerate}
+\end{exer}
+\begin{proof}
+    \begin{enumerate}[label=\alph*.]
+        \item By direct computation $u'(r) = \frac{1}{r\log(r)}$. A sketch of two graphs is shown below.
+        \begin{figure}[h!]
+            \centering
+            \includegraphics[width=0.5\linewidth]{Chapter 1/Photos/Problem12A.png}
+            \caption{Sketch of \textcolor{red}{$u(r)$} and \textcolor{blue}{$u'(r)$}.}
+            \label{fig:12a}
+        \end{figure}
+        To see $u\in L^2([0,1/2])$ we can compute:
+        $$\int_0^{1/2} \log\left(-\log x\right) dx = \int_{2}^{\infty} \frac{\log\left(\log u\right)^2}{u^{1/2}}\frac{1}{u^{3/2}}du.$$ Notice that for all $x\geq 0$ we have that $\log(x) < x$ and that $\log(x)$ is increasing so $\log(\log(x))^2 \leq \log(x)^2.$ 
+        Further, we have that $x^{1/2} > \log(x)^2$ for all $x\geq 1$. Thus we have that
+        \begin{align*}
+            \int_0^{1/2} \log\left(-\log x\right) dx &= \int_{2}^{\infty} \frac{\log\left(\log u\right)}{u^{1/2}}\frac{1}{u^{3/2}}du\\
+            &\leq \int_2^\infty \frac{1}{u^{3/2}} du = \left[\frac{-2}{u^{1/2}}\right]_{u=2}^{u=\infty} =  \frac{1}{\sqrt{2}} < \infty.
+        \end{align*}
+        Thus $u\in L^2([0,1/2]).$ u does not admit a continuous extension as in particular $\lim_{n\to\infty} \abs{u\left(\frac{1}{n}\right)} = \infty$ so $u(0)$ cannot be defined. $u'(r)\not \in L^2([0,1/2])$ as by direct computation:
+        $$\int_{0}^{1/2} \frac{1}{r^2\log(r)^2} dr \geq \int_{0}^{1/2} \frac{1}{r\log(r)^2} \frac{1}{r}dr.$$
+        Notice that for all $x\leq 1$ we have that
+        $\frac{1}{x\log(x)^2} \geq 1.$ Thus we have that 
+        \begin{align*}
+            \int_{0}^{1/2} \frac{1}{r^2\log(r)^2} dr &= \int_{0}^{1/2} \frac{1}{r\log(r)^2} \frac{1}{r}dr\\
+            &\geq \int_{0}^{1/2}  \frac{1}{r}dr.
+        \end{align*}
+        But the last integral diverges. Therefore $u'\not \in L^2([0,1/2])$
+        \item
+    \end{enumerate}
 \end{proof}
 
 \printbibliography
