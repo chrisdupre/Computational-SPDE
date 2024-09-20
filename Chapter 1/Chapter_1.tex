@@ -209,7 +209,7 @@ Assume by density that $\phi \in C^\infty_c(\R).$
 \begin{exer}
     \begin{enumerate}[label=\alph*.]
         \item Let $u(r) = \log\left(\abs{\log(r)}\right)$ for $r> 0$. Sketch a graph of $u(r)$ and $u'(r).$ Show that $u\in L^2\left(\left[0,\frac{1}{2}\right]\right)$ but $u\not \in C\left(\left[0,\frac{1}{2}\right]\right)$ and $u' \not \in L^2\left(\left[0,\frac{1}{2}\right]\right)$
-        \item
+        \item Let $u(\mathbf{x}) = \log\left(\log(r)\right), r=\|x\|_{2}$ and $D = \left\{\mathbf{x} \in \R^2 \vert \|x\|_{2} \leq \frac{1}{2}\right\}.$ Show that $u$ has a well-defined weak derivative $D_i u \in L^2(D)$ for $i=1,2.$ Hence, show that $u\in H^1(D)$ and $u\not \in C\left(\overline{D}\right).$
     \end{enumerate}
 \end{exer}
 \begin{proof}
@@ -237,8 +237,45 @@ Assume by density that $\phi \in C^\infty_c(\R).$
             &\geq \int_{0}^{1/2}  \frac{1}{r}dr.
         \end{align*}
         But the last integral diverges. Therefore $u'\not \in L^2([0,1/2])$
-        \item
+        \item It is clear that $u\not \in C\left(\overline{D}\right)$ as $u(r)\not \in C\left(\left[0,\frac{1}{2}\right)\right)$ and the function is radial. To see that the function admits a weak-derivative, notice that 
+        \begin{align*}
+            \int_{D} u(\mathbf{x})\nabla \phi\left(\mathbf{x}\right) d\mathbf{x} &= \left[\int_{0}^{1/2}\int_{0}^{2\pi}  r u(r) \frac{\partial \phi(r,\theta)}{\partial r} d\theta dr\right] \mathbf{e}_r + \left[\int_{0}^{1/2}\int_{0}^{2\pi} u(r) \frac{\partial \phi(r,\theta)}{\partial \thetat} d\theta dr \right]\mathbf{e}_\theta\\
+            &= \left[\int_{0}^{2\pi} \left[\left[ru(r)\phi(r,\theta)\right]_{r=0}^{1/2}-\int_{0}^{1/2} \left(ru'(r)+u(r)\right)\phi(r,\theta)\right]d\theta\right] \mathbf{e}_r \\
+            &+ \left[\int_{0}^{1/2} u(r) \left[\phi(r,\theta)\right]_{\theta=0}^{\theta=2\pi} dr \right]\mathbf{e}_\theta\\
+            &= \int_{0}^{2\pi} \frac{u\left(\frac{1}{2}\right)\phi\left(\frac{1}{2},\theta\right)}{2}d\theta \mathbf{e}_r - \left[\int_{0}^{\frac{1}{2}} \int_{0}^{2\pi} \left(u'(r)+\frac{u(r)}{r}\right)\phi(r,\theta) r d\theta dr \right]\mathbf{e}_r.
+        \end{align*}
+        Thus if we can show that $ru'(r) + u(r) \in L^2\left(\left[0,\frac{1}{2}\right]\right)$, then the weak derivative is given by $\nabla u\left(\mathbf{x}\right) = \left[\frac{u\left(r\right)}{r} + u'(r) \right] e_r.$ We have already show $u(r) \in L^2\left(\left[0,\frac{1}{2}\right]\right)$. For the second term, notice
+        $$\int_{0}^{1/2} r^2 u'(r)^2 dr = \int_{0}^{1/2} \frac{1}{\log(r)^2} dr \leq \int_{0}^{1/2} \frac{1}{\log(2)^2} dr = \frac{1}{2\log(2)^2} < \infty. $$
+        Thus $u\left(\mathbf{x}\right)\in H^1(D).$
     \end{enumerate}
+\end{proof}
+
+\begin{exer}
+For  $l >0$ and $u \in C^{n+1}\left(\left[-l,l\right]\right)$, show that there exists a polynomial $p$ of degree at most $n$ such that
+$$\|u-p\|_{L^2\left(\left[-l,l\right]\right)} \leq \frac{1}{\left(n+1\right)!}\|D^{n+1}u\|_{L^2\left(\left[-l,l\right]\right)} l^{n+1}$$    
+\end{exer}
+\begin{proof}
+    \tcr{Need to prove}
+\end{proof}
+
+\begin{exer}
+Prove the Poincaré inequality for the domain $D =(0, l)$ by the following methods:
+    \begin{enumerate}[label=\alph*.]
+        \item With $K_p = l$, by writing $u(x) = \int_{0}^{x} u'(s) ds.$
+        \item With $K_p = l/\pi$, by writing $u$ in the basis $\left\{\sin\left(k\pi x/l\right), k\in \N\right\}.$
+    \end{enumerate}
+    Show that $K_p = l/\pi$ is the optimal constant. 
+\end{exer}
+\begin{proof}
+    \tcr{Need to prove}
+\end{proof}
+
+\begin{exer}
+    For Banach spaces $X,Y$, prove that $L \in \mathcal{L}(X,Y)$ if and only if $L$ is continuous from $X$ to $Y$. Prove that $\|Lu\|_{Y} \leq \|L\|_{\mathcal{L}(X,Y)} \|u\|_{X}$ for $u\in X$.
+\end{exer}
+\begin{proof}
+\tcr{Need to prove}
+    
 \end{proof}
 
 \printbibliography
