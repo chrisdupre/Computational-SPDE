@@ -1,6 +1,6 @@
 \documentclass{amsart}
 \usepackage{graphicx,amsfonts,amsthm,amsmath,amssymb,enumerate,enumitem,xcolor,commath,hyperref} % Required for inserting images
-\usepackage{geometry}[margin=1in]
+\usepackage{geometry}[margin=0.75in]
 \usepackage{biblatex}[sorting=none]
 
 \title{An Introduction to Computational Stochastic PDEs\\ Exercises: Chapter 1}
@@ -26,6 +26,8 @@
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Hil}{\mathcal{H}}
 \newcommand{\E}{\mathcal{E}}
+\DeclareMathOperator{\csch}{csch}
+\DeclareMathOperator{\sech}{sech}
 
 \newcommand{\tcr}[1]{\textcolor{red}{#1}}
 
@@ -267,15 +269,269 @@ Prove the Poincaré inequality for the domain $D =(0, l)$ by the following metho
     Show that $K_p = l/\pi$ is the optimal constant. 
 \end{exer}
 \begin{proof}
-    \tcr{Need to prove}
+    \begin{enumerate}[label=\alph*.]
+        \item 
+        \begin{align*}
+            \int_0^{l} u(x)^2 dx &= \int_0^l \left[\int_{0}^{l} \mathbf{1}_{[0,x]}(s) u'(s) ds \right]^2 dx\\
+            &\leq  \int_0^l \left[\int_{0}^{l} \mathbf{1}_{[0,x]}(s)^2 ds \right] \left[\int_0^l \left(u'(s)\right)^2 ds \right]dx\\
+            &\leq \left[\int_0^l x dx\right]\left[\int_0^l \left(u'(s)\right)^2 ds \right]\\
+            &\leq \frac{l^2}{2}\left[\int_0^l \left(u'(s)\right)^2 ds \right].
+        \end{align*}
+        Taking the square root proves the inequality with in fact $K_p =l/\sqrt{2}.$
+        \item By writing $u = \sum_{n\in\N} a_n \frac{\sqrt{2}\sin\left(\frac{n \pi x}{l}\right)}{\sqrt{l}}$, note that $\|u\|_{L^2([0,l])}^2 = \sum_{n\in \N} a_n^2$. Taking the derivative yields 
+        $$u'(x) = \sum_{n\in \N} \frac{n\pi a_n}{l} \frac{\sqrt{2}\cos\left(\frac{n\pi x}{l}\right)}{\sqrt{l}}.$$
+        This is again written in an orthonormal expansion. Thus 
+        $$\|u'\|_{L^{2}[0,l]}^2 = \sum_{n\in \N} \frac{n^2 \pi^2 }{l^2}a_n^2.$$ 
+        In order for $\|u\|^2_{L^{2}[0,1]} \leq K_p^2 \|u\|_{H^1}^2$ it is a neccesary and sufficient condition that $$K_p^2 \geq \max_{n\in \N} \frac{1}{\frac{n^2\pi^2}{l^2}} = \max_{n\in \N} \frac{l^2}{\pi^2 n^2}.$$
+        Thus it is clear that a minimal bound is $K_p = \frac{l}{\pi}.$ This is sharp, as in particular it is achieved by $u(x) = \sin\left(\frac{\pi x}{l}\right).$
+    \end{enumerate}
 \end{proof}
 
 \begin{exer}
     For Banach spaces $X,Y$, prove that $L \in \mathcal{L}(X,Y)$ if and only if $L$ is continuous from $X$ to $Y$. Prove that $\|Lu\|_{Y} \leq \|L\|_{\mathcal{L}(X,Y)} \|u\|_{X}$ for $u\in X$.
 \end{exer}
 \begin{proof}
-\tcr{Need to prove}
+We will start with the second statement. Note that if $\|u\|_{X} = 0$, the inequality is trivial. Thus without loss assume that $\|u\|_{X} \neq 0$. Then by linearity, we have that $$\|Lu\|_{X} = \|L\left[\frac{u}{\|u\|_{X}}\right]\|x\|_{X}.$$ By the definition of the operator norm, it is clear that $\|Lu\|_{X} \leq \|L\|_{\mathcal{L}\left(X,Y\right)} \|u\|_{X}.$
+\par Thus if $L \in \mathcal{L}\left(X,Y\right),$ we clearly have that $\|u\|_{X} < \frac{\varepsilon}{\|L\|_{\mathcal{L}\left(X,Y\right)}}$ implies that $\|Lu\|_{Y} < \varepsilon$ and therfore the operator is continuous. If $L$ is continuous, this implies that if $\|u_n\|_{X} \to 0$ then $\|Lu_n\|_{Y} \to 0.$ If the operator is unbounded, that means there is a sequence of unit vectors $u_n$ such that $\|Lu_n\|_Y > n$ for all $n\in \N.$ We thus have that $\frac{u_n}{\|Lu_n\|_{Y}^{1/2}}\to 0$ but $\left\|L\frac{u_n}{\|Lu_n\|_{Y}^{1/2}}\right\| = \|Lu_n\|_{Y}^{1/2} > n^{1/2}$ and thus the sequence is unbounded. Thus a linear operator is continuous if and only if it is bounded. 
+\end{proof}
+
+\begin{exer}
+    Let $H$ be a real Hilbert space. Show that 
+    $$2\|u\|_{H}^2 + 2 \|v\|_{H}^2 = \|u-v\|_{H}^2 + \|u+v\|_{H}^2, \ u,v\in H.$$
+    For a closed subspace $G$ of $H$, let $p_n$ be such that $\lim_{n\to \infty }\|p_n-g\|_{H} = \inf_{p\in G} \|p-g\|_{H}.$ Prove that $p_n$ is Cauchy.
+\end{exer}
+\begin{proof}
+    \begin{align*}
+        \|u-v\|_{H}^2 + \|u+v\|_{H}^2 & = \|u\|^2_{H}+ 2\text{Re}\left(\langle u, v\rangle_{H}\right) + \|v\|_{H}^2 + \|u\|^2_{H}- \text{Re}\left(2\langle u, v\rangle_{H}\right) + \|v\|_{H}^2\\
+        &= 2\|u\|_{H}^2 + 2\|v\|_{H}^2.
+    \end{align*}
+    Let $u = g-p_n, v= g-p_m$. Then $u+v = 2g-p_n-p_m$ and $u-v = p_m - p_n$ and 
+    \begin{align*}
+        \|p_n - p_m\|_{H}^2 &= 2 \|g-p_n\|_{H}^2 + 2 \|g-p_m\|_{H}^2 - 4\left\|g-\frac{p_n+p_m}{2}\right\|_{H}^2\\
+        & \leq 2 \|g-p_n\|_{H}^2 + 2 \|g-p_m\|_{H}^2 - 4\inf_{p\in G}\left\|g-p\right\|_{H}^2.
+    \end{align*}
+    By the assumptions of the statement, the right hand side tends to zero for sufficiently large $n,m$. Hence $p_n$ is Cauchy.
+\end{proof}
+
+\begin{exer}
+    Prove the Riesz Representation theorem. 
+\end{exer}
+\begin{proof}
+Consider $G = \left\{u\in H: l(u) = 0\right\}$. Clearly $G$ is closed by continuity of $l$, thus $G^{\perp}$ is well-defined. We claim that $G^{\perp}$ is one dimensional. Assume not. Then there exists two linearly indepedent vectors $v_1,v_2 \in G^{\perp}, v_1\neq 0, v_2 \neq 0.$ In particular, $l(v_1) \neq 0, l(v_2) \neq 0.$ Consider $v_3 = v_1 - \frac{l(v_1)}{l(v_2)}v_2.$  By direct computation $l(v_3) = 0.$ As $v_1,v_2 \in G^{\perp}$, this implies that $v_3 = 0.$ However, this is a contradiction as $v_1,v_2$ are linearly independent. Thus $G^{\perp}$ must be one dimensional. Take $s$ in $v^{\perp}$. Then we claim that 
+$$l(v) = \langle \frac{l(s)}{\|s\|_{H}}s,v\rangle.$$
+It is clear that if $v\in G^{\perp}$ this holds and if $v\in G$ this holds. By unique decomposition and linearity, it holds for the entire space. 
+\end{proof}
+
+\begin{exer}
+    Let $H$ be a separable Hilbert space and $B = \left\{u\in H: \|u\|_{H} \leq 1\right\}.$ If $H$ is infinite dimensional, prove the following:
+    \begin{enumerate}[label=\alph*.]
+        \item $B$ is not compact. 
+        \item If $L:H\to H$ is compact, $L(B)$ is bounded and $L\in \mathcal{L}(H).$
+        \item Let $\mu$ be a measure on $H$ such that $\mu\left(x+F\right) = \mu(F) , F\in \mathcal{B}(H), x\in H$ and $x+F:= \{x+y : y\in F
+        \}.$ If $\mu(B)$ is finite, then $\mu(B) = 0.$
+    \end{enumerate}
+\end{exer}
+\begin{proof}
+\begin{enumerate}[label=\alph*.]
+    \item As $H$ is infinite dimensional and separable, we can construct a countable orthonormal basis $\{e_i\}$ by Gram-Schmidt. Consider the open set $\bigcup_{i} B(e_{i},1).$ We claim this is a cover for $B.$ In fact, if $u\in B\cap B(e_{i},1)^{C}$ then necessarily $u\perp e_i,u\neq 0.$ As $\{e_i\}$ is an orthonormal basis, this is indeed a cover of $B$. However, we can not construct a finite subcover, as in particular $e_i \in B$ for all $i$ but $i\neq j \implies e_i \not \in B(e_j,1).$ Thus $B$ is not compact.  
+    \item Suppose not. Then $L$ is unbounded, so there exists a sequence of vectors $v_n$ which are all bounded in norm by $1$ such that $\|L(v_n)\| > n , n\in \N.$ In particular, $L(B)$ contains an infinite dimensional unit ball and so if its closure were compact, we would arrive at a contradiction with $a.$ Thus $L$ must be bounded and therefore $L\in \mathcal{L}(B).$ (Note: This is much stronger than the statement implies. The same argument implies that for every $\varepsilon >0$, there exists only a finite dimensional subspace of vectors such that $\frac{\|Lv\|}{\|v\|}>\varepsilon.$)
+    \item Let $e_k$ be as in part a. and consider $B_k=B\left(\frac{e_k}{2}, \frac{1}{8}\right).$ These are disjoint subsets of $B_1$. By translation invariance $B_k$ does not depend on $k$. Further $\bigcup_{k} B_k \subset B_1$. As $B_1$ has finite measure, $\mu(B_k) = 0$. However, as $H$ is separable we can cover all of $H$ by a countable number of $B_k$ balls plus translations. Thus $\mu(H) = 0$ and in particular $\mu(B_1) = 0.$
+\end{enumerate}
+\end{proof}
+
+\begin{exer}
+    Let $L\in \mathcal{L}(H)$ be non-negative. Prove that $Tr L = \sum_{i=1}^{\infty} \langle Le_i, e_i\rangle$ does not depend on the orthonormal basis $e_i.$
+\end{exer}
+\begin{proof}
+    Note that we may express $e_i = \sum_{j=1}^\infty \langle \phi_j,e_i\rangle \phi_j. $
+    Substituting this expression in (the terms are absolutely summable so we are free to exchange terms) we obtain:
+    \begin{align*}
+        \langle L e_i ,e_i\rangle &= \sum_{j=1}^{\infty} \sum_{m=1}^{\infty} \langle \phi_m,e_i\rangle\langle \phi_j, e_i\rangle \langle L\phi_m, \phi_j\rangle\\
+        \sum_{i=1}^\infty  \langle L e_i ,e_i\rangle &=\sum_{m=1}^\infty \sum_{j=1}^\infty \sum_{i=1}^{\infty} \langle \phi_m,e_i\rangle\langle \phi_j, e_i\rangle \langle L\phi_m, \phi_j\rangle\\
+        &= \sum_{m=1}^{\infty} \sum_{j=1}^\infty \langle \phi_m, \phi_j\rangle \langle L\phi_m, \phi_j \rangle\\
+        &= \sum_{m=1}^\infty \langle L\phi_m, \phi_m \rangle.
+    \end{align*}
+Thus, the value of the trace (if it exists) is independent of the orthonormal sequence. 
+\end{proof}
+
+\begin{exer}
+    Calculate the Green’s functions for the operators in Examples 1.81 and 1.84 in \cite{lord2014introduction}.
+\end{exer}
+\begin{proof}
+Example 1.81 is the operator
+$$Au = -u_{xx}, u\in H^2(0,1)\cap H^1_0(0,1).$$
+To compute the Green's function, we seek a $G$ such that 
+$G_xx = -\delta(x-y), G(0,y) = 0, G(1,y) = 0.$
+We thus know that $G$ can be written as 
+$$G(x,y) = \begin{cases}f_1(y)x+f_2(y)& x<= y \\ f_3(y)x+f_4(y) & x\geq y.\end{cases}$$
+From the boundary conditions, we know that $f_2(y) = 0, f_3(y)+f_4(y) = 0$. Thus we reduce to 
+$$G(x,y) = \begin{cases}f_1(y)x& x<= y \\ f_3(y)(x-1) & x\geq y.\end{cases}$$
+We also need that for continuity and the second derivative to be $G_xx = -\delta (x-y)$
+\begin{gather*}
+    f_1(x)x = f_3(x)(x-1)\\
+    f_1(x)-1 = f_3(x).
+\end{gather*}
+Thus $(f_3(x)+1)x = f_3(x)(x-1) \implies -x = f_3(x), f_1(x) = -(x-1).$
+Thus $G$ is given by
+$$G(x,y) = \begin{cases}x(1-y)& x<= y \\ y(1-x)& x\geq y.\end{cases}.$$
+As displayed in $(1.26).$
+\par For Example 1.84, we proceed the same way. In this case, we have that 
+$$G(x,y) = \begin{cases}
+    f_1(y)\cosh(x+\pi) + f_2(y)\sinh(x+\pi) & x\leq y\\
+    f_3(y)\cosh(x-\pi) + f_4(y)\sinh(x-\pi)& y\leq x.
+\end{cases}$$
+In order to satisfy the periodic boundary conditions, we must have that $G(-\pi,y) = G(\pi,y), G_x(-\pi,y) = G_x(\pi,y)$ for all $y$. This implies that $f_1(y) = f_3(y), f_2(y)=f_4(y).$ In order to satisfy continuity and the jump equation, we must have that
+\begin{gather*}
+    f_1(x)\cosh(x+\pi) + f_2(x)\sinh(x+\pi) = f_1(x)\cosh(x-\pi)+f_2(x)\sinh(x-\pi)\\
+    f_1(x)\sinh(x+\pi) + f_2(x)\cosh(x+\pi) = f_1(x)\sinh(x-\pi)+f_2(x)\cosh(x-\pi)+1\\
+    f_1(x)\left[\cosh(x+\pi)-\cosh(x-\pi)\right] = f_2(x)\left[\sinh(x-\pi)-\sinh(x+\pi)\right]\\
+    f_1(x)\left[\sinh(x+\pi)-\sinh(x-\pi)\right] = f_2(x)\left[\cosh(x-\pi)-\cosh(x+\pi)\right]+1.
+\end{gather*}
+We claim and prove the hyperbolic trig identities:
+\begin{align*}
+    \cosh(a)-\cosh(b) &= \frac{e^{a}+e^{-a}-e^{b}-e^{-b}}{2}\\
+    &= 2 \frac{e^{\frac{a-b}{2}}-e^{\frac{b-a}{2}}}{2}\frac{e^{\frac{a+b}{2}}-e^{-\frac{a+b}{2}}}{2}\\
+    &= 2\sinh\left(\frac{a-b}{2}\right) \sinh\left(\frac{a+b}{2}\right)\\
+    \sinh(a)-\sinh(b) &=  \frac{e^{a}-e^{-a}-e^{b}+e^{-b}}{2}\\
+    &= 2 \frac{e^{\frac{a-b}{2}}-e^{\frac{b-a}{2}}}{2}\frac{e^{\frac{a+b}{2}}+e^{-\frac{a+b}{2}}}{2}\\
+    &= 2\sinh\left(\frac{a-b}{2}\right)\cosh\left(\frac{a+b}{2}\right).
+\end{align*}
+Thus we have that 
+\begin{gather*}
+    \cosh(x+\pi)-\cosh(x-\pi) = 2\sinh\left(\pi\right)\sinh\left(x\right)\\
+    \sinh(x+\pi) - \sinh(x-\pi) = 2\sinh(\pi)\cosh(x)
+\end{gather*}
+This simplifies our last two formulas to
+\begin{gather*}
+2f_1(x)\sinh\left(\pi\right)\sinh\left(x\right) = -2f_2(x)\sinh\left(\pi\right)\cosh\left(x\right) \\2f_1(x)\sinh\left(\pi\right)\cosh\left(x\right) = -2f_2(x)\sinh\left(\pi\right)\sinh\left(x\right) +1
+\end{gather*}
+The first reduces to $f_2(x) = -f_1(x)\tanh(x). $ Plugging this into the second gives 
+ $$f_1(x) = \frac{\cosh(x)}{2\sinh(\pi)}, f_2(x) = -\frac{\sinh(x)}{2\sinh(\pi)}.$$
+Substituting these in gives
+$$
+G(x,y) = \begin{cases}
+    \frac{\cosh\left(\pi+x-y\right)}{2\sinh(\pi)}& x\leq y\\
+    \frac{\cosh\left(x-y-\pi\right)}{2\sinh(\pi)}& y\leq x.
+\end{cases}
+$$
+This function is not obviously symmetric. To see that it is, notice that if $x<y$ and $r = x-y$ then
+$$G(x,y) = \frac{\cosh\left(\pi+r\right)}{2\sinh(\pi)} = \frac{\cosh\left(-\pi-r\right)}{2\sinh(\pi)} = G(y,x).$$
+Hence the function is symmetric. It is clearly integrable as it is piecewise smooth. 
+\end{proof}
+
+\begin{exer}
+     Prove that the Fourier transform of a convolution $u\star v$, defined by
+    $$u\star v(x)  := \int_{\R^d} u(x-y)v(y) dy,$$
+    for $u,v \in L^1(\R^d),$ is given by 
+    $$\widehat{u\star v}(\lambda) = \left(2\pi\right)^{d/2} \widehat{u}(\lambda)\widehat{v}(\lambda).$$
+\end{exer}
+\begin{proof}
+By direct computation:
+\begin{align*}
+    \widehat{u\star v}(\lambda)&= \frac{1}{\left(2\pi\right)^{d/2}}\int_{x\in \R^d} \int_{y \in \R^d} e^{-i\lambda^T x} u(x-y)v(y) dx dy\\
+    &= \left(2\pi\right)^{d/2}\left[ \frac{1}{\left(2\pi\right)^{d/2}}\int_{x\in \R^d} e^{-i\lambda^T (x-y)}u(x-y) dx \right]\left[ \frac{1}{\left(2\pi\right)^{d/2}}\int_{y\in \R^d} e^{-i\lambda^T y}v(y) dy\right]\\
+    &= \left(2\pi\right)^{d/2}\left[ \frac{1}{\left(2\pi\right)^{d/2}}\int_{z\in \R^d} e^{-i\lambda^T (z)}u(z) dz \right]\left[ \frac{1}{\left(2\pi\right)^{d/2}}\int_{y\in \R^d} e^{-i\lambda^T y}v(y) dy\right]\\
+    &= {\left(2\pi\right)^{d/2}}\widehat{u}(\lambda)\widehat{v}(\lambda).
+\end{align*}    
+\end{proof}
+
+\begin{exer}
+\label{Exercise 1.22}
+With $u_k$ and $U_k$ defined by (1.35) and (1.39) in \cite{lord2014introduction} in the case $(a,b) =(0,l)$, show that
+$$U_k = \sum_{n\in \Z} u_{k+nJ}, \ \forall \ u\in H^2_{\text{per}}(0,l).$$
+\end{exer}
+\begin{proof}
+    \tcr{Still to prove. I looked at 1.39 and cried}
+\end{proof}
+
+\begin{exer}
+    Let $Au := u-u_xx$ for $u\in \mathcal{D}(A):=H^2_{per}(0,2\pi)$ and denote the associate fractional power norm by $\|\cdot\|_{r}.$ Let $J$ be even and $I_J$ be defined as in $(1.40)$ in \cite{lord2014introduction}.  Let $P_{J}$ denote the orthogonal projection from $L^2([0,2\pi])$ onto the space $\text{span}\{e^{2\pi i j x}\}_{j=-J/2+1}^{J/2}.$
+    \begin{enumerate}[label=\alph*.]
+        \item Using Exercise \ref{Exercise 1.22}, prove that for $r>1/4$ there exists a $K>0$ such that
+        $$\|I_{J}u - P_{J}u\|_{L^2([0,2\pi])} \leq \frac{K}{J^{2r}}\|u\|_{r}$$
+        \item Prove Lemma 1.100 by showing that, for some $K > 0$
+        $$\|u-I_{j}u\|_{1/2} \leq \frac{K}{J} \|u\|_{1}.$$
+        \item Let $u_n$ be given $(1.35)$ in \cite{lord2014introduction} and suppose there exists $K,p > 0$ such that $\abs{u_n} \leq Kn^{-(1+p)}$ for all $n\in\Z.$ Show that 
+        $$\abs{\|u\|_{r/2}-\|I_{J}u\|_{r/2}} = O\left(J^{-(1+p)}\right), \ 0 < 2r \leq p.$$
+        Now prove that $\|u_1\|_{H^1(0,2\pi)}-\|I_J u_1\|_{H^1(0,2\pi} = O\left(J^{-3}\log(J)\right)$ for the function $u_1(x)$ depicted in figure 1.6 in \cite{lord2014introduction}. 
+    \end{enumerate}
+\end{exer}
+\tcr{Still to prove}
+\begin{proof}
+     \begin{enumerate}[label=\alph*.]
+        \item 
+        \item 
+        \item
+    \end{enumerate}
+\end{proof}
+
+\begin{exer}
+    \begin{enumerate}[label=\alph*.]
+        \item Prove that the trapezium rule approximation $T_J \left(u^2\right)$ to $\int_0^1 u(x)^2 dx $  can be written as 
+        $$T_J(u^2) = \|I_{J}u\|_{L^2\left([0,1]\right)}^2$$ for $u\in C(0,1)$ such that $u(0)=u(1)$.
+        \item By using Theorem A.6 in \cite{lord2014introduction}, explain the higher rates of convergence shown in Figure 1.6(a) in \cite{lord2014introduction} for the $L^2(0,1)$ norm
+    \end{enumerate}
     
+\end{exer}
+\tcr{still to prove}
+\begin{proof}
+    \begin{enumerate}[label=\alph*.]
+        \item 
+        \item
+    \end{enumerate}  
+\end{proof}
+
+\begin{exer}
+    Consider $u \in L^2(0,2\pi)$. Suppose that the Fourier coefficient $u_k = O\left(\abs{k}^{-(2r+1+\varepsilon)/2}\right) $, for some $r,\varepsilon >0$. Show that $u \in H^r (0,2\pi)$.
+\end{exer}
+\begin{proof}
+Note that we may explicitly write the $H^r$ norm as 
+$$\|u\|_{H^r}^2 = \sum_{k\in \Z}\left(\sum_{j=0}^r \abs{k}^{2j}\right)u_k^2.$$
+If $u_k = O\left(\abs{k}^{-(2r+1+\varepsilon)/2}\right)$, then the terms in this sum are $O\left(\abs{k}^{-(1+\varepsilon)}\right)$ and hence the series is summable. 
+\end{proof}
+
+\begin{exer}
+    Derive the formula for the Hankel transform given in Theorem 1.107 for d =1, 2.
+\end{exer}
+\begin{proof}
+For $d=1$, a function is isotropic if and only if it is even. In this case
+\begin{align*}
+    \frac{1}{\sqrt{2\pi}}\int_{\R}e^{-i\lambda x}f(x) dx & = \frac{1}{\sqrt{2\pi}} \int_{0}^{\infty}\left(e^{i\lambda x}+e^{-i\lambda x}\right) f(x) dx \\
+    & = \frac{2}{\sqrt{2\pi}} \int_0^\infty \cos(\lambda x) f(x)dx.
+\end{align*}
+For $d=2$, we use polar coordinates
+\begin{align*}
+    \frac{1}{2\pi}\int_{\R^2}e^{-i\lambda^T x}f(x) dx &=\frac{1}{2\pi}\int_{0}^2\pi \int_0^\infty e^{-i\left(\lambda_1 r\cos(\theta) + \lambda_2 r\sin(\theta) \right)}f(r)r dr d\theta \\
+    & = \int_0^\infty \left[\frac{1}{2\pi} \int_0^{2\pi} e^{-i \|\lambda\| \cos\left(\theta-\text{arg}\lambda\right)} d\theta \right] f(r)r dr\\
+    &=  \int_0^\infty \left[\frac{1}{2\pi} \int_0^{2\pi} e^{-i \|\lambda\| \cos\left(u\right)} du\right] f(r)r d
+\end{align*}
+This directly matches the definition of $J_0\left(r\|\lambda\|\right)$ and proves the claim.
+\end{proof}
+
+\begin{exer}
+    The discrete cosine transform (DCT-1) $y\in \R^N$ of a vector $x \in \R^N$ is defined by
+    $$y_k := \frac{x_1 + \left(-1\right)^{k-1}x_N}{2} + \sum_{j=1}^{N-1} x_j \cos\left(\frac{\pi(k-1)(j-1)}{N-1}\right).$$
+    for $k=1,...,N$. Show how to evaluate $y$ by using the FFT on a vector of length $2N-2$ which you need to specify in terms of $x$.
+     The discrete sine transform (DCT-1) $y\in \R^N$ of a vector $x \in \R^N$ is defined by
+     $$y_k := \sum_{j=1}^{N} x_j \cos\left(\frac{\pi jk}{N+1}\right), \ k=1,..,N.$$
+     Show how to evaluate $y$ using the FFT on a vector of length $2N+2$. Implement your algorithms in Python. 
+\end{exer}
+\begin{proof}
+    \tcr{Still to prove and code}
+\end{proof}
+
+\begin{exer}
+    Define the truncated series for (1.37) in \cite{lord2014introduction} by
+$$u_N (x) = \sum_{j=1}^N \frac{2\left(-1\right)^{j+1}}{j}\sin(jx).$$
+Using DST-1, evaluate $u_N(x)$ at $x = k\pi/(N +1)$ for $k =−N,...,N$ and plot $u_N(x)$
+against $x$ for different values of $N$. Define the truncated series for (1.38) in \cite{lord2014introduction} by
+$$v_N (x) = \frac{\pi}{2}+ \sum_{j=1}^{N-1} \frac{2\left(\cos(j\pi)-1\right)}{\pi j^2}\cos(jx).$$
+Making use of DCT-1, evaluate $u_N(x)$ at $x =(k -1)\pi/(N-1)$ for $k =-N +2,...,N$
+and plot $v_N (x)$ against $x$ for different values of $N$.
+
+\end{exer}
+\begin{proof}
+    \tcr{Still to prove and code}
 \end{proof}
 
 \printbibliography
