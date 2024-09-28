@@ -441,11 +441,20 @@ With $u_k$ and $U_k$ defined by (1.35) and (1.39) in \cite{lord2014introduction}
 $$U_k = \sum_{n\in \Z} u_{k+nJ}, \ \forall \ u\in H^2_{\text{per}}(0,l).$$
 \end{exer}
 \begin{proof}
-    \tcr{Still to prove. I looked at 1.39 and cried}
+    Note that $\{e^{2\pi i k/l}\}_{k\in \Z}$ is a basis for $H^2_{per}(0,l).$ If we write $u(x) =\sum_{k\in\Z} a_k e^{2\pi i x k/l}$ then we have that
+    $$u_k = a_k. $$
+    We may exchange limits as $u\in H^2$ and use $u(0)= u(1)$ as it is periodic. We then write
+    \begin{align*}
+        U_k &= \frac{1}{J}\sum_{j=1}^J u(jl/J) e^{-2\pi i k j/J}\\
+        &= \frac{1}{J}\sum_{j=1}^J \sum_{m\in \Z}  a_m e^{2\pi i(m-k) j/J }\\
+        &= \frac{1}{J}\sum_{m\in\Z}a_m\left[\sum_{j=1}^J  e^{2\pi i (m-k)j/J}\right].
+    \end{align*}
+    If $m-k=nJ, n\in \N$ then the interior sum is clearly $J$. If $m-k\neqnJ, n\in\N$ then the interior sum is zero by destructive interference. Thus we reduce our sum to
+    $$U_k = \sum_{n\in\Z}a_{k+nJ}.$$
 \end{proof}
 
 \begin{exer}
-    Let $Au := u-u_xx$ for $u\in \mathcal{D}(A):=H^2_{per}(0,2\pi)$ and denote the associate fractional power norm by $\|\cdot\|_{r}.$ Let $J$ be even and $I_J$ be defined as in $(1.40)$ in \cite{lord2014introduction}.  Let $P_{J}$ denote the orthogonal projection from $L^2([0,2\pi])$ onto the space $\text{span}\{e^{2\pi i j x}\}_{j=-J/2+1}^{J/2}.$
+    Let $Au := u-u_{xx}$ for $u\in \mathcal{D}(A):=H^2_{per}(0,2\pi)$ and denote the associate fractional power norm by $\|\cdot\|_{r}.$ Let $J$ be even and $I_J$ be defined as in $(1.40)$ in \cite{lord2014introduction}.  Let $P_{J}$ denote the orthogonal projection from $L^2([0,2\pi])$ onto the space $\text{span}\{e^{2\pi i j x}\}_{j=-J/2+1}^{J/2}.$
     \begin{enumerate}[label=\alph*.]
         \item Using Exercise \ref{Exercise 1.22}, prove that for $r>1/4$ there exists a $K>0$ such that
         $$\|I_{J}u - P_{J}u\|_{L^2([0,2\pi])} \leq \frac{K}{J^{2r}}\|u\|_{r}$$
@@ -473,11 +482,14 @@ $$U_k = \sum_{n\in \Z} u_{k+nJ}, \ \forall \ u\in H^2_{\text{per}}(0,l).$$
     \end{enumerate}
     
 \end{exer}
-\tcr{still to prove}
 \begin{proof}
     \begin{enumerate}[label=\alph*.]
-        \item 
-        \item
+        \item Note that the basis $\{e^{2\pi i k x}\}_{k\in\N}$ is an orthogonal basis for $L^{2}([0,1]).$ Thus, 
+        $$\|I_{J}u\|_{L^2([0,1]})^2 = \|U_k\|_{2}^2.$$
+        As $u(0)= u(1)$, note that $U_k$ is itself the Discrete Fourier transform of the vector $h u(x_k).$ By isometry property of the DFT we have
+        $$\|I_{J}u\|_{L^2([0,1])}^2 = \|U_k\|_{2}^2 = h^2\frac{1}{h} \|u\|_2^2 = h\|u\|_{2}^2.$$
+        Expanding $\|u\|_{2}^2$ we see this is exactly the Trapezium rule for approximating $\int_0^1 u(x)^2 dx.$
+        \item \tcr{still to prove}
     \end{enumerate}  
 \end{proof}
 
@@ -510,14 +522,50 @@ This directly matches the definition of $J_0\left(r\|\lambda\|\right)$ and prove
 
 \begin{exer}
     The discrete cosine transform (DCT-1) $y\in \R^N$ of a vector $x \in \R^N$ is defined by
-    $$y_k := \frac{x_1 + \left(-1\right)^{k-1}x_N}{2} + \sum_{j=1}^{N-1} x_j \cos\left(\frac{\pi(k-1)(j-1)}{N-1}\right).$$
+    $$y_k := \frac{x_1 + \left(-1\right)^{k-1}x_N}{2} + \sum_{j=2}^{N-1} x_j \cos\left(\frac{\pi(k-1)(j-1)}{N-1}\right).$$
     for $k=1,...,N$. Show how to evaluate $y$ by using the FFT on a vector of length $2N-2$ which you need to specify in terms of $x$.
-     The discrete sine transform (DCT-1) $y\in \R^N$ of a vector $x \in \R^N$ is defined by
+     The discrete sine transform (DST-1) $y\in \R^N$ of a vector $x \in \R^N$ is defined by
      $$y_k := \sum_{j=1}^{N} x_j \cos\left(\frac{\pi jk}{N+1}\right), \ k=1,..,N.$$
      Show how to evaluate $y$ using the FFT on a vector of length $2N+2$. Implement your algorithms in Python. 
 \end{exer}
 \begin{proof}
-    \tcr{Still to prove and code}
+    Note that 
+    $m=2N+j$
+    \begin{align*}
+        y_k &= \frac{x_1 + \left(-1\right)^{k-1}x_N}{2} + \sum_{j=2}^{N-1} \frac{x_j}{2}\left[e^{\frac{\pi i }{N-1}(k-1) (j-1) } +e^{-\frac{\pi i }{N-1}(k-1) (j-1) }\right]\\
+        &= \frac{x_1 + \left(-1\right)^{k-1}x_N}{2}+ \sum_{j=2}^{N-1} \frac{x_j}{2}e^{-\frac{\pi i }{N-1}(k-1) (j-1) }+ \sum_{j=-N+1}^{-2}\frac{x_{-j}}{2}e^{-\frac{\pi i }{N-1}(k-1) (1+j) }\\
+        &= \frac{x_1 + \left(-1\right)^{k-1}x_N}{2}+\sum_{j=2}^{N-1} \frac{x_j}{2}e^{-\frac{\pi i }{N-1}(k-1) (j-1) } + \sum_{j=N+1}^{2N-2}\frac{x_{2N-j}}{2}e^{-\frac{\pi i }{N-1}(k-1) (j-2N+1) } \\
+        &=\frac{x_1}{2}e^{-\frac{2\pi i }{2N-2}(k-1) (1-1) }+ \frac{x_N}{2}e^{-\frac{2\pi i }{2N-2}(k-1) (N-1) }\\
+        &+\sum_{j=2}^{N-1} \frac{x_j}{2}e^{-\frac{2\pi i }{2N-2}(k-1) (j-1) } + \sum_{j=N+1}^{2N-2}\frac{x_{2N-j}}{2}e^{-\frac{2\pi i }{2N-2}(k-1) (j-1) }.
+    \end{align*}
+    In the last line we use the fact that for all $k\in \Z$
+    $e^{\frac{2\pi i}{2N-2}(k-1)(2N-2)} = 1.$
+    Thus, this is exactly the DFT of the vector $z_j, j = 1,... 2N-2$ 
+    $$z_{m} = \begin{cases}
+        \frac{x_{1}}{2}&j=1\\
+        \frac{x_j}{2}& 2\leq =j \leq N-1\\
+        \frac{x_N}{2}& j = N\\
+        \frac{x_{2N-j}}{2}& N+1 \leq j \leq  2N-2
+    \end{cases}$$
+    To see the implementation of DCT-1 in Python, refer to Chapter\_1.ipynb.
+    \par 
+    Similarly for DST-1 we have 
+    \begin{align*}
+        y_k &= \sum_{j=1}^N \frac{x_j}{2} \left[e^{\frac{i\pi j k}{N+1}} + e^{-\frac{i\pi j k}{N+1}}\right]\\
+        &= \sum_{j=1}^N\frac{x_j}{2}e^{-\frac{2\pi i j k}{2N+2}} + \sum_{j=-N}^{-1} \frac{x_{-j}}{2}e^{-\frac{2\pi i j k}{2N+2}}\\
+        &= \sum_{j=1}^N\frac{x_j}{2}e^{\frac{-2\pi i j}{2N+2}}e^{-\frac{2\pi i j (k-1)}{2N+2}} + \sum_{j=-N}^{-1} \frac{x_{-j}}{2}e^{\frac{-2\pi i j}{2N+2}}e^{-\frac{2\pi i j (k-1)}{2N+2}}\\
+        &= \sum_{j=2}^{N+1}\frac{x_{j-1}}{2}e^{\frac{-2\pi i (j-1)}{2N+2}}e^{-\frac{2\pi i (j-1) (k-1)}{2N+2}} + \sum_{j=N+3}^{2N+2} \frac{x_{2N+3-j}}{2}e^{\frac{-2\pi i (j-1-2N-2)}{2N+2}}e^{-\frac{2\pi i (j-1-2N-2) (k-1)}{2N+2}}\\
+        &= \sum_{j=2}^{N+1}\frac{x_{j-1}}{2}e^{\frac{-2\pi i (j-1)}{2N+2}}e^{-\frac{2\pi i (j-1) (k-1)}{2N+2}} + \sum_{j=N+3}^{2N+2} \frac{x_{2N+3-j}}{2}e^{\frac{-2\pi i (j-1)}{2N+2}}e^{-\frac{2\pi i (j-1) (k-1)}{2N+2}}.
+    \end{align*}
+    This is exactly the DFT of the vector $z_j, j = 1,... 2N+2$ such that 
+
+      $$  z_j = \begin{cases}
+            0& j = 1, N+2\\
+            \frac{x_{j-1}}{2}e^{\frac{-2\pi i (j-1)}{2N+2}} & 2 \leq j \leq N+1 \\
+            \frac{x_{2N+3-j}}{2}e^{\frac{-2\pi i (j-1)}{2N+2}} & N+3 \leq 2N+2
+        \end{cases}$$
+    To see the implementation of DST-1 using this formula in Python, please refer to to Chapter\_1.ipynb.
+    \tcr{Still to code}
 \end{proof}
 
 \begin{exer}
