@@ -41,20 +41,33 @@
     Let $V = H_0^1(a,b).$ Show that if Assumption 2.8 in \cite{lord2014introduction} holds, then $a(\cdot,\cdot): V\times V\to \R$ in (2.9) in \cite{lord2014introduction} is an inner product on $V.$
 \end{exer}
 \begin{proof}
-    
+Note that $a$ is clearly symmetric and linear in the first argument. It is also clearly non-negative along the diagonal. Thus, it suffices to show that it is non-degenerate. To see this, note that 
+$$a(u,u) ^2= \int_{a}^b p(x) u'(x)^2 dx + \int_a^b q(x) u(x)^2 dx \geq p_0\int_{a}^b u'(x)^2 dx.$$
+Thus $a(u,u) = 0$ implies that $\int_a^b u'(x)^2 dx$ which implies $u'(x) = 0$ a.s. As $u \in H_0^1(a,b)$, this implies that $u = 0.$ Thus $a(\cdot,\cdot)$ is a non-degenerate symmetric bilinear form, hence an inner product. 
 \end{proof}
 
 \begin{exer}
     Let $p,q$ satisfy the conditions of Assumption 2.8 in \cite{lord2014introduction}. Prove the norm equivalence $(2.14).$ In addition, show that the energy norm $\|\cdot \|_{E}$ is equivalent to the norm $\|\cdot \|_{H^1(a,b)}.$
 \end{exer}
 \begin{proof}
-    
+    To see the upper bounds, not that 
+    $$\|u\|_{E}^2 \leq \max\left\{\|p\|_{\infty},\|q\|_{\infty}\right\} \left[\int_a^b u'(x)^2 dx + \int_a^b u(x)^2 dx\right] = \max\left\{\|p\|_{\infty},\|q\|_{\infty}\right\} \|u\|_{H^1(a,b)}^2.$$
+    For the lower bound, note that 
+    \begin{align*}
+        \|u\|_{E}^2 & \geq p_0 \int_a^b u'(x)^2 dx = \frac{p_0}{1+K^2} \int_a^b u'(x)^2 dx + \frac{p_0 }{1+K^2} K^2 \int_a^b u'(x)^2 dx \\
+        & \geq \frac{p_0}{1+K^2}\left[\int_a^b u'(x)^2 +u(x)^2 dx \right] = \frac{p_0}{1+K^2} \|u\|_{H^1(a,b)}^2.
+    \end{align*}
+    Where $K$ is the associated Poincar\'e inequality (take $K = \frac{b-a}{\pi}$). Collecting these gives
+    $$\sqrt{\frac{p_0}{1+K^2}}\|u\|_{H^1(a,b)} \leq \|u\|_{E} \leq \max\left\{\sqrt{\|p\|_{\infty}},\sqrt{\|q\|_{\infty}}\right\}\|u\|_{H^1(a,b)}.$$
 \end{proof}
 
 \begin{exer}
     Let Assumption 2.8 hold. Assume, for contradiction, that there are two weak solutions $u_1,u_2$ satisfying (2.11) in \cite{lord2014introduction} and show that $u_1 = u_2$. Hence, deduce that (2.11) has at most one solution.
 \end{exer}
 \begin{proof}
+Suppose there exists two solutions $u_1 \neq u_2$ that satisfy (2.11). Then for all $u\in H_0^1(a,b)$
+$$a(u,u_1-u_2) = a(u,u_1)-a(u,u_2) = \ell(u)-\ell(u) = 0.$$ 
+In particular, this applies for $u = u_1-u_2.$ Thus $\|u_1-u_2\|_{E} = 0.$ By equivalence of norms, $\|u_1-u_2\|_{H_0^1(a,b)} = 0.$ Therefore $u_1 = u_2$, contradiction $\Rightarrow\!\Leftarrow$. 
     
 \end{proof}
 
@@ -75,9 +88,9 @@
 \end{exer}
 \begin{proof}
     \begin{enumerate}[label=\alph*.]
-        \item 
-        \item
-        \item 
+        \item \tcr{Still to prove}
+        \item \tcr{Still to prove}
+        \item \tcr{Still to prove}
     \end{enumerate}
 \end{proof}
 
@@ -85,7 +98,7 @@
     Fix the coefficients $p=1$ and $q=1.$ Using Algorithms $2.1$ and $2.2$, investigate the condition number of the matrices $A,K$ and $M$ on the finite element mesh width $h$.
 \end{exer}
 \begin{proof}
-    
+    \tcr{Still to prove}
 \end{proof}
 
 \begin{exer}
@@ -152,10 +165,12 @@
 \end{proof}
 
 \begin{exer}
-    
+    Consider the BVP (2.3) on $D = (0,1)$ with non-homogeneous boundrary conditions $u(0)=\alpha$ and $u(1)=\beta.$ By writing 
+    $$u_h(x) = a\phi_0(x) + \sum_{i=1}^{J} u_i \phi_i(x) + \beta \phi_{j+1}(x)$$
+    where $\phi_0(x)$ and $\phi_{J+1}(x)$ are the hat functions associated with $x=0$ and $x=1$ respectively, derive the linear system $A\mathbf{u} = \hat{\mathbf{b}}$ to be solved for the interior values $u_i = u_h (z_i), i = 1,...,J.$ Relate this linear system to the one obtained for homogeneous conditions. Edit algorithm 2.1 and compute the finite element approximation to $(2.3)$ with the boundary conditions $u(0)=1$ and $u(1)=0$, for $p=1, q=10$ and $f=1.$
 \end{exer}
 \begin{proof}
-    
+    \tcr{Still to prove}
 \end{proof}
 
 \printbibliography
