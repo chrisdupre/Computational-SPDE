@@ -91,12 +91,68 @@
 \begin{exer}
     Using $(2.36)$, show that the local quadratic basis functions associate with the nodes $x_1^k = 0, x_2^k = \frac{h}{2}, x_3^k = h$ on the element $e_k = [0,h]$ are 
     \begin{align*}
-        \phi_1^k(x) = \frac{2x^2}{h}-\frac{3x}{h}+ 1, && \phi_2^k(x) = \frac{4x}{h}-\frac{4x^2}{h^2}, && \phi_3^k = \frac{2x^2}{h^2}-\frac{x}{h}.
+        \phi_1^k(x) = \frac{2x^2}{h^2}-\frac{3x}{h}+ 1, && \phi_2^k(x) = \frac{4x}{h}-\frac{4x^2}{h^2}, && \phi_3^k = \frac{2x^2}{h^2}-\frac{x}{h}.
     \end{align*}
     Assume that $q=0$ and $p$ and $f$ are constants. Compute the element vector $\mathbf{b}^k \in \R^3$ and show that the $3\times3$ element matrix $A^k$ for this specific element is 
     $$A^k = \frac{1}{3h}\begin{pmatrix}
         7 & -8 & 1 \\ -8 & 16 & -8\\ 1 & -8 & 7 
     \end{pmatrix}$$
+\end{exer}
+\begin{proof}
+    Note that we seek $\phi_{j}^k(x)$ as a quadratic polynomial such that 
+    $$\phi_{j}^k\left(x_l^k\right) = \delta_{jl}.$$
+    This immediately allows us to write 
+    \begin{align*}
+        \phi_1^k(x) &= c_1 \left(x-\frac{h}{2}\right)\left(x-h\right) = c_1\left[x^2 - \frac{3xh}{2} + \frac{h^2}{2}\right]\\
+        \phi_2^k(x) &= c_2 x\left(x-h\right)=  c_2\left[x^2 - hx\right]\\
+        \phi_3^k(x) &= c_3 x\left(x-\frac{h}{2}\right) = c_3\left[x^2 - \frac{xh}{2}\right].
+    \end{align*}
+    We can solve for $c_1,c_2,c_3$ as follows
+    \begin{gather*}
+        \phi_1^k\left(\frac{h}{2}\right) = c_1 \frac{h^2}{2} = 1 \implies c_1 = \frac{2}{h^2}\\
+        \phi_2^k\left(\frac{h}{2}\right) = c_2 \left[\frac{h^2}{4}-\frac{h^2}{2}\right] = -c_2 \frac{h^2}{4} = 1 \implies c_2 = \frac{-4}{h^2}\\
+        \phi_3^k(h) = c_3 \frac{h^2}{2} = 1 \implies c_3 = \frac{2}{h^2}.
+    \end{gather*}
+    Plugging these back in give the desired expressions. 
+    \par We can then compute $b^k$ by the following three integrals
+    \begin{align*}
+        \left(b^k\right)_1 &= \int_0^h f \phi_1^k(x) dx = f\int_0^h \frac{2x^2}{h^2}-\frac{3x}{h}+1 dx = f\left[\frac{2x^3}{3h^2}-\frac{3x^2}{2h}+x\right]_{x=0}^{x=h}\\
+        &= f \left[\frac{2h}{3}-\frac{3h}{2}+h\right] = \frac{fh}{6}\\
+        \left(b^k\right)_2 &= \int_0^h f \phi_2^k(x) dx = f\int_0^h \frac{4x}{h}-\frac{4x^2}{h^2} dx = f\left[\frac{2x^2}{h}-\frac{4x^3}{3h^2}\right]_{x=0}^{x=h}\\
+        &= fh\left[2-\frac{4}{3}\right] = \frac{2fh}{3}\\
+        \left(b^k\right)_3 &= \int_0^h f \phi_3^k(x) dx = \int_0^h f \phi_2^k(x) dx = f\int_0^h \frac{2x^2}{h^2}-\frac{x}{h} dx = f\left[\frac{2x^3}{3h^2}-\frac{x^2}{2h}\right]_{x=0}^{x=h}\\
+        &= fh\left[\frac{2}{3}=\frac{1}{2}\right] = \frac{fh}{6} 
+    \end{align*}
+    Thus we have that $b^k = \frac{fh}{6}\begin{bmatrix}
+        1 & 4 & 1
+    \end{bmatrix}.$
+    \par We then compute the entries of $A^k$ by computing the integrals
+    $$\left(A_k\right)_{i,j} = \int_0^h p\frac{dx\phi_i^k}{dx}(x)\frac{dx\phi_j^k}{dx}(x) dx.$$
+    It is clear this is symmetric, thus we only need to compute 6 integrals in theory. In fact, we can achieve less as $\phi_{3}^k(x) = \phi_{1}^{k}(h-x), \phi_2^k(x) = \phi_2^k(h-x)$. Therefore we have that 
+    $\frac{d\phi_{3}^k}{dx}(x) = -\frac{d\phi_{1}^k}{dx}(h-x)$ and $\frac{d\phi_{2}^k}{dx}(x) = -\frac{d\phi_{2}^k}{dx} $and thus
+    \begin{align*}
+        \int_0^h \frac{d\phi_{1}^k}{dx}(x)\frac{d\phi_{1}^k}{dx}(x) dx = \int_0^h \frac{d\phi_{1}^k}{dx}(h-x)\frac{d\phi_{1}^k}{dx}(h-x) dx = \int_0^h \frac{d\phi_{3}^k}{dx}(x) \frac{d\phi_{3}^k}{dx}(x) dx\\
+        \int_0^h \frac{d\phi_{1}^k}{dx}(x)\frac{d\phi_{2}^k}{dx}(x) dx = \int_0^h \frac{d\phi_{1}^k}{dx}(h-x)\frac{d\phi_{2}^k}{dx}(h-x) dx = \int_0^h \frac{d\phi_{3}^k}{dx}(x)\frac{d\phi_{2}^k}{dx}(x) dx. 
+    \end{align*}
+    Thus we only need to compute 4 integrals. Namely
+    \begin{align*}
+        \int_0^h \frac{d\phi_{1}^k}{dx}(x)\frac{d\phi_{1}^k}{dx}(x) dx &= \int_0^h \left(\frac{4x}{h^2}-\frac{3}{h}\right)^2 dx = \int_0^h \frac{16x^2}{h^4}-\frac{24x}{h^3}+\frac{9}{h^2} dx \\
+        &= \left[\frac{16x^3}{3h^4}-\frac{12x^2}{h^3}+\frac{9x}{h^2} \right]_{x=0}^{x=h}\\
+        &= \frac{1}{h}\left[\frac{16}{3}-12+9\right] =\frac{7}{3h}. \\
+        \int_0^h \frac{d\phi_{2}^k}{dx}(x)\frac{d\phi_{2}^k}{dx}(x) dx &= \int_0^h \left(\frac{4}{h}-\frac{8x}{h}\right)^2 dx \\
+        &= h^2\left[-\frac{\left(\frac{4}{h}-\frac{8x}{h^2}\right)^3}{24}\right]_{x=0}^{x=h}  = h^2 \left[\frac{64}{24h^3} - \frac{\left(4-8\right)^3}{24h^3}\right]\\
+        &= \frac{128}{24h} = \frac{16}{3h}\\
+        \int_0^h \frac{d\phi_{1}^k}{dx}\frac{d\phi_{2}^k}{dx} dx &= \int_0^h \left(\frac{4}{h}-\frac{8x}{h^2}\right)\left(\frac{4x}{h^2}-\frac{3}{h}\right) dx = \int_0^h \frac{16x}{h^3} - \frac{32x^2}{h^4} + \frac{24x}{h^3} - \frac{12}{h^2} dx \\
+        &= \left[\frac{8x^2}{h^3} - \frac{32 x^3}{3h^4} + \frac{12 x^2}{h^3}-\frac{12x}{h^2}\right]_{x=0}^{x=h} = \frac{1}{h}\left[8-\frac{32}{3}+12-12\right] = \frac{-8}{3h}\\
+        \int_0^h \frac{d\phi_{1}^k}{dx}\frac{d\phi_{3}^k}{dx}(x) dx &= \int_0^h \left(\frac{4x}{h^2}-\frac{3}{h}\right)\left(\frac{4x}{h^2} -\frac{1}{h}\right)dx = \int_0^h \frac{16x^2}{h^4}-\frac{12x}{h^3}-
+        \frac{4x}{h^3} + \frac{3}{h^2}dx\\
+        &= \left[\frac{16x^3}{3h^4}-\frac{6x^2}{h^3}-\frac{2x^2}{h^3} +\frac{3x}{h^2}\right]_{x=0}^{x=h} = \frac{1}{h}\left[\frac{16}{3}-6-2+3\right] = \frac{1}{3h}
+    \end{align*}
+    Plugging these in gives $A^k. $
+\end{proof}
+
+\begin{exer}
+    
 \end{exer}
 \begin{proof}
     
