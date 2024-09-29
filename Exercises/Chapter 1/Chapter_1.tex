@@ -98,7 +98,6 @@ $$\int_{X} \|u(x)\|_{Y} dx < \infty.$$
 \end{proof}
 
 \begin{exer}
-\tcr{Newline}
     \begin{enumerate}[label=\alph*.]
         \item If $u:\R\to\R$ is measurable, define simple functions $u_n$ such that $u_n(x) \to u(x)$ for all $x\in\R.$
         \item If $G\in C\left(\R\times \R\right)$, define simple functions of the form
@@ -106,7 +105,7 @@ $$\int_{X} \|u(x)\|_{Y} dx < \infty.$$
         for $x_j\in\R, F_j \in \mathcal{B}\left(\R\right)$, such that $G_j\to G$ point-wise as $N\to \infty.$
     \end{enumerate}
 \end{exer}
-\begin{proof}\tcr{Somehow}
+\begin{proof}
     \begin{enumerate}[label=\alph*.]
         \item Define $\mathcal{F}_{j}^{n} = u^{-1}\left(\left[\frac{j}{n},\frac{j+1}{n}\right)\right)\cap\left[-n,n\right], -n^2 \leq j \leq n^2$ and define:
         $$u_n(x) = \sum_{j=-n^2}^{n^2} \frac{j}{n}\mathbf{1}_{\mathcal{F}_{j}^{n}}.$$
@@ -450,7 +449,7 @@ $$U_k = \sum_{n\in \Z} u_{k+nJ}, \ \forall \ u\in H^2_{\text{per}}(0,l).$$
         &= \frac{1}{J}\sum_{m\in\Z}a_m\left[\sum_{j=1}^J  e^{2\pi i (m-k)j/J}\right].
     \end{align*}
     If $m-k=nJ, n\in \N$ then the interior sum is clearly $J$. If $m-k\neqnJ, n\in\N$ then the interior sum is zero by destructive interference. Thus we reduce our sum to
-    $$U_k = \sum_{n\in\Z}a_{k+nJ}.$$
+    $$U_k = \sum_{n\in\Z}a_{k+nJ} = \sum_{n\in\Z} u_{k+nJ}.$$
 \end{proof}
 
 \begin{exer}
@@ -465,12 +464,41 @@ $$U_k = \sum_{n\in \Z} u_{k+nJ}, \ \forall \ u\in H^2_{\text{per}}(0,l).$$
         Now prove that $\|u_1\|_{H^1(0,2\pi)}-\|I_J u_1\|_{H^1(0,2\pi} = O\left(J^{-3}\log(J)\right)$ for the function $u_1(x)$ depicted in figure 1.6 in \cite{lord2014introduction}. 
     \end{enumerate}
 \end{exer}
-\tcr{Still to prove}
 \begin{proof}
      \begin{enumerate}[label=\alph*.]
-        \item 
-        \item 
-        \item
+        \item Note that by Exercise \ref{Exercise 1.22} and the properties of the Fourier transform, we have that 
+        $$\|I_{J} - P_{J}u\|_{L^2}_{([0,2\pi])}^2 = \sum_{k\leq -J/2}\abs{u_k}^2 + \sum_{k=-J/2+1}^{J/2} \abs{\sum_{n\in\Z, n\neq 0} u_{k+nJ}}^2 + \sum_{k\geq J/2+1} \abs{u_k}^2.$$
+        To bound the first and last term note that
+        \begin{align*}
+            \sum_{k\leq -J/2}\abs{u_k}^2 + \sum_{k\geq J/2+1} \abs{u_k}^2 &\leq \sum_{\abs{k}\geq J/2} \abs{u_k}^2 = \sum_{\abs{k}\geq J/2} \frac{\left(1+k^2\right)^{4r}\abs{u_k^2}}{\left(1+k^2\right)^{4r}} \\
+            &\leq \frac{2^{4r}\|u\|_{r}^2}{2\pi \abs{J}^{4r}}.
+        \end{align*}
+        To bound the middle term, we first note the following:
+        \begin{align*}
+            \abs{\sum_{n\in\Z,n\neq 0} u_{k+nJ}}^2 &\leq \left(\sum_{n\in\Z,n\neq 0}\abs{u_{k+nJ}}\right)^2 = \left(\sum_{n\in\Z,n\neq 0} \frac{\left(1+(k+nJ)^2\right)^{r}\abs{u_{k+nJ}}}{\left(1+(k+nJ)^2\right)^{r}}\right)^2\\
+            &= \frac{1}{\abs{J}^{4r}}\left(\sum_{n\in\Z,n\neq 0} \frac{\left(1+(k+nJ)^2\right)^{r}\abs{u_{k+nJ}}}{\left(1/J+(n+k/J)^2\right)^{r}}\right)^2\\
+            &\leq \frac{1}{\abs{J}^{4r}} \left(\sum_{n\in\Z,n\neq 0}\left(1+(k+nJ)^2\right)^{2r}\abs{u_{k+nJ}}^2\right) \left(\sum_{n\in\Z,n\neq 0}\frac{1}{\left(1/J+(n+k/J)^2\right)^{2r}}\right)
+        \end{align*}
+        We now claim that for all $-J/2+1\leq k\leq J/2$ we have that 
+        $$(n-1/2)^2\leq 1/J + (n+k/J)^2, n\in\Z, n\neq 0.$$
+        It is clear that the term $k/J$ is bounded between $(-1/2+1/J,1/2).$ To minimize, we must find the closest non-zero integer to this range. This is obviously $1$. Thus we have that
+        $$(n-1/2)^2 \leq (n+k/J)^2 \leq 1/J + (n+k/J)^2, n\in\Z, n\neq 0.$$
+        Therefore, we have that 
+        \begin{align*}
+              \abs{\sum_{n\in\Z,n\neq 0} u_{k+nJ}}^2 &\leq \frac{1}{\abs{J}^{4r}} \left(\sum_{n\in\N} \frac{2}{(n-1/2)^{4r}}\right)\left(\sum_{n\in\Z,n\neq 0}\left(1+(k+nJ)^2\right)^{2r}\abs{u_{k+nJ}}^2\right).
+        \end{align*}
+        For $r>1/4,$ the second term is summable and we have 
+        $$\sum_{n\in\N} \frac{2}{(n-1/2)^{4r}} \leq 2^{4r+1} + \int_{1}^\infty \frac{2}{(x-1/2)^{4r}}dx = 2^{4r}\left(2+\frac{1}{4r-1} \right).$$
+        Thus we have that
+        And we have that 
+        \begin{align*}
+             \sum_{k=-J/2+1}^{J/2} \abs{\sum_{n\in\Z, n\neq 0} u_{k+nJ}}^2 \leq \frac{2^{4r}\left(2+\frac{1}{4r-1}\right)}{2\pi\abs{J}^{4r}} 2\pi\sum_{k\in \Z}\left(1+k^2\right)^{2r}\abs{u_{k}}^2 = \frac{2^{4r}\left(2+\frac{1}{4r-1}\right)}{2\pi\abs{J}^{4r}}\|u\|_{r}^2
+        \end{align*}
+        Combining these estimates gives
+        $$\|I_{J} - P_{J}u\|_{L^2}_{([0,2\pi])}^2\leq \frac{2^{4r-1}\left(3+\frac{1}{4r-1}\right)}{\pi\abs{J/2}^{4r}} \|u\|_{r}^2.$$
+        Taking the square root of both sides leads to the required result. 
+        \item \tcr{Still to prove}
+        \item \tcr{Still to prove}
     \end{enumerate}
 \end{proof}
 
@@ -488,8 +516,8 @@ $$U_k = \sum_{n\in \Z} u_{k+nJ}, \ \forall \ u\in H^2_{\text{per}}(0,l).$$
         $$\|I_{J}u\|_{L^2([0,1]})^2 = \|U_k\|_{2}^2.$$
         As $u(0)= u(1)$, note that $U_k$ is itself the Discrete Fourier transform of the vector $h u(x_k).$ By isometry property of the DFT we have
         $$\|I_{J}u\|_{L^2([0,1])}^2 = \|U_k\|_{2}^2 = h^2\frac{1}{h} \|u\|_2^2 = h\|u\|_{2}^2.$$
-        Expanding $\|u\|_{2}^2$ we see this is exactly the Trapezium rule for approximating $\int_0^1 u(x)^2 dx.$
-        \item \tcr{still to prove}
+        Expanding $\|u\|_{2}^2$ we see this is exactly the Trapezium rule for approximating $\int_0^1 u(x)^2 dx$ i.e. $T_J(u^2).$
+        \item As $u^2$ where $u$ is the function $u=x^2(1-x)^2$ in Figure 1.6(a) in \cite{lord2014introduction} is clearly smooth and $\frac{d^4}{dx^4}u^2(0) = \frac{d^3}{dx^3}u^2(1) = 0.$ Therefore we can see that theorem A.6 holds with $p=3$. Hence the $O(h^6)$ convergence. 
     \end{enumerate}  
 \end{proof}
 
