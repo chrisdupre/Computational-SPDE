@@ -549,59 +549,43 @@ This directly matches the definition of $J_0\left(r\|\lambda\|\right)$ and prove
 \end{proof}
 
 \begin{exer}
-    The discrete cosine transform (DCT-1) $y\in \R^N$ of a vector $x \in \R^N$ is defined by
-    $$y_k := \frac{x_1 + \left(-1\right)^{k-1}x_N}{2} + \sum_{j=2}^{N-1} x_j \cos\left(\frac{\pi(k-1)(j-1)}{N-1}\right).$$
-    for $k=1,...,N$. Show how to evaluate $y$ by using the FFT on a vector of length $2N-2$ which you need to specify in terms of $x$.
+    Note: The textbook is based on Matlab. Matlab is a 1-indexed language. This means that you count indices in Matlab as $1,2,3,...$. Python is a 0-indexed language. That means you count indices in Python as $0,1,2,...$. To ease indexing confusion, we will transfer all formulas to conform with 0-indexing. 
+    In this case we have that 
+    $$\text{DFT}(\mathbf{x})_k = \sum_{j=0}^{N-1} x_j e^{-\frac{2\pi i}{N} jk}.$$
+    \par The discrete cosine transform (DCT-1) $y\in \R^N$ of a vector $x \in \R^N$ is defined by
+    $$y_k := \frac{x_0 + \left(-1\right)^{k}x_{N-1}}{2} + \sum_{j=1}^{N-2} x_j \cos\left(\frac{\pi k j}{N-1}\right).$$
+    for $k=0,...,N-1$. Show how to evaluate $y$ by using the FFT on a vector of length $2N-2$ which you need to specify in terms of $x$.
      The discrete sine transform (DST-1) $y\in \R^N$ of a vector $x \in \R^N$ is defined by
-     $$y_k := \sum_{j=1}^{N} x_j \cos\left(\frac{\pi jk}{N+1}\right), \ k=1,..,N.$$
+     $$y_k := \sum_{j=0}^{N-1} x_j \sin\left(\frac{\pi (j+1)(k+1)}{N+1}\right), \ k=1,..,N.$$
      Show how to evaluate $y$ using the FFT on a vector of length $2N+2$. Implement your algorithms in Python. 
 \end{exer}
 \begin{proof}
-    Note that 
-    $m=2N+j$
-    \begin{align*}
-        y_k &= \frac{x_1 + \left(-1\right)^{k-1}x_N}{2} + \sum_{j=2}^{N-1} \frac{x_j}{2}\left[e^{\frac{\pi i }{N-1}(k-1) (j-1) } +e^{-\frac{\pi i }{N-1}(k-1) (j-1) }\right]\\
-        &= \frac{x_1 + \left(-1\right)^{k-1}x_N}{2}+ \sum_{j=2}^{N-1} \frac{x_j}{2}e^{-\frac{\pi i }{N-1}(k-1) (j-1) }+ \sum_{j=-N+1}^{-2}\frac{x_{-j}}{2}e^{-\frac{\pi i }{N-1}(k-1) (1+j) }\\
-        &= \frac{x_1 + \left(-1\right)^{k-1}x_N}{2}+\sum_{j=2}^{N-1} \frac{x_j}{2}e^{-\frac{\pi i }{N-1}(k-1) (j-1) } + \sum_{j=N+1}^{2N-2}\frac{x_{2N-j}}{2}e^{-\frac{\pi i }{N-1}(k-1) (j-2N+1) } \\
-        &=\frac{x_1}{2}e^{-\frac{2\pi i }{2N-2}(k-1) (1-1) }+ \frac{x_N}{2}e^{-\frac{2\pi i }{2N-2}(k-1) (N-1) }\\
-        &+\sum_{j=2}^{N-1} \frac{x_j}{2}e^{-\frac{2\pi i }{2N-2}(k-1) (j-1) } + \sum_{j=N+1}^{2N-2}\frac{x_{2N-j}}{2}e^{-\frac{2\pi i }{2N-2}(k-1) (j-1) }.
-    \end{align*}
-    In the last line we use the fact that for all $k\in \Z$
-    $e^{\frac{2\pi i}{2N-2}(k-1)(2N-2)} = 1.$
-    Thus, this is exactly the DFT of the vector $z_j, j = 1,... 2N-2$ 
-    $$z_{m} = \begin{cases}
-        \frac{x_{1}}{2}&j=1\\
-        \frac{x_j}{2}& 2\leq =j \leq N-1\\
-        \frac{x_N}{2}& j = N\\
-        \frac{x_{2N-j}}{2}& N+1 \leq j \leq  2N-2
-    \end{cases}$$
-    To see the implementation of DCT-1 in Python, refer to Chapter\_1.ipynb.
-    \par 
-    Similarly for DST-1 we have 
-    \begin{align*}
-        y_k &= \sum_{j=1}^N \frac{x_j}{2} \left[e^{\frac{i\pi j k}{N+1}} + e^{-\frac{i\pi j k}{N+1}}\right]\\
-        &= \sum_{j=1}^N\frac{x_j}{2}e^{-\frac{2\pi i j k}{2N+2}} + \sum_{j=-N}^{-1} \frac{x_{-j}}{2}e^{-\frac{2\pi i j k}{2N+2}}\\
-        &= \sum_{j=1}^N\frac{x_j}{2}e^{\frac{-2\pi i j}{2N+2}}e^{-\frac{2\pi i j (k-1)}{2N+2}} + \sum_{j=-N}^{-1} \frac{x_{-j}}{2}e^{\frac{-2\pi i j}{2N+2}}e^{-\frac{2\pi i j (k-1)}{2N+2}}\\
-        &= \sum_{j=2}^{N+1}\frac{x_{j-1}}{2}e^{\frac{-2\pi i (j-1)}{2N+2}}e^{-\frac{2\pi i (j-1) (k-1)}{2N+2}} + \sum_{j=N+3}^{2N+2} \frac{x_{2N+3-j}}{2}e^{\frac{-2\pi i (j-1-2N-2)}{2N+2}}e^{-\frac{2\pi i (j-1-2N-2) (k-1)}{2N+2}}\\
-        &= \sum_{j=2}^{N+1}\frac{x_{j-1}}{2}e^{\frac{-2\pi i (j-1)}{2N+2}}e^{-\frac{2\pi i (j-1) (k-1)}{2N+2}} + \sum_{j=N+3}^{2N+2} \frac{x_{2N+3-j}}{2}e^{\frac{-2\pi i (j-1)}{2N+2}}e^{-\frac{2\pi i (j-1) (k-1)}{2N+2}}.
-    \end{align*}
-    This is exactly the DFT of the vector $z_j, j = 1,... 2N+2$ such that 
-
-      $$  z_j = \begin{cases}
-            0& j = 1, N+2\\
-            \frac{x_{j-1}}{2}e^{\frac{-2\pi i (j-1)}{2N+2}} & 2 \leq j \leq N+1 \\
-            \frac{x_{2N+3-j}}{2}e^{\frac{-2\pi i (j-1)}{2N+2}} & N+3 \leq 2N+2
-        \end{cases}$$
-    To see the implementation of DST-1 using this formula in Python, please refer to to Chapter\_1.ipynb.
-    \tcr{Still to code}
+   For DCT-1, notice that
+   \begin{align*}
+       \cos\left(\frac{\pi j k}{N-1}\right) &= \frac{1}{2}\left[e^{\frac{-2\pi i }{2N-2} \left(-j\right)k}+e^{\frac{-2\pi i }{2N-2} jk} \right]\\
+       &= \frac{1}{2}\left[e^{\frac{-2\pi i }{2N-2} \left(2N-2-j\right)k}+e^{\frac{-2\pi i }{2N-2} jk} \right].
+   \end{align*}
+   This is exactly the $k$-th element of the DFT of a vector with a value of $1/2$ in the $j$-th index and a value of $1/2$ in the $2N-2-j$-th index. This is a problem in the case of $j=0,N-1$ as these agree or lie outside of the range. However, note that 
+   \begin{align*}
+     \cos\left(\frac{\pi 0 k}{N-1}\right) = 1, && \cos\left(\frac{\pi N-1 k}{N-1}\right) = -1^k = e^{\frac{-2\pi i}{2N-2} (N-1)k}.  
+   \end{align*}
+   Thus these terms can be handled by placing them at the $0$-th and $N-1$-th positions respectively. if $\overrightarrow{x}$ denotes $[x_1,...,x_{N-2}]$ in forward order and $\overleftarrow{x}$ denotes the reversed order, then we can write:
+   $$\text{DCT-1}\left([x_0,\overrightarrow{x},x_{N-1}]\right) = \frac{1}{2} \text{DFT}\left([x_0,\overrightarrow{x},x_{N-1},\overleftarrow{x}]\right)[:N].$$
+   Where we use the notation $[:N]$ to denote grabbing the first $N$ elements, as a standard Python slice. 
+   \par DST-1 is similar. Namely, we write
+   \begin{align*}
+       \sin\left(\frac{\pi (j+1) (k+1)}{N+1}\right) &= \frac{1}{2i}\left[e^{\frac{-2\pi i }{2N-2} \left(-j-1\right)(k+1)}-e^{\frac{-2\pi i }{2N-2} (j+1)(k+1)} \right]\\
+       &= \frac{i}{2}\left[e^{\frac{-2\pi i }{2N+2} (j+1)(k+1)} -e^{\frac{-2\pi i }{2N+2} \left(2N+1-j\right)(k+1)}\right].
+   \end{align*}
 \end{proof}
-
+This is again the DFT of a vector with a $\frac{i}{2}$ in the $j+1$-coordinate and a $\frac{-i}{2}$ in the $2N+1-j$-th coordinate. Writing $\overrightarrow{x}$ as $[x_0,...,x_{N-1}]$ in the forward order and $\overleftarrow{x}$ as the same vector in the reversed order, we have 
+$$\text{DST-1}\left(\overrightarrow{x}\right) = \frac{i}{2}\text{FFT}\left([0,\overrightarrow{x},0,-\overleftarrow{x}]\right)[1:N+1].$$
 \begin{exer}
     Define the truncated series for (1.37) in \cite{lord2014introduction} by
 $$u_N (x) = \sum_{j=1}^N \frac{2\left(-1\right)^{j+1}}{j}\sin(jx).$$
-Using DST-1, evaluate $u_N(x)$ at $x = k\pi/(N +1)$ for $k =−N,...,N$ and plot $u_N(x)$
+Using DST-1, evaluate $u_N(x)$ at $x = k\pi/(N +1)$ for $k = -N,...,N$ and plot $u_N(x)$
 against $x$ for different values of $N$. Define the truncated series for (1.38) in \cite{lord2014introduction} by
-$$v_N (x) = \frac{\pi}{2}+ \sum_{j=1}^{N-1} \frac{2\left(\cos(j\pi)-1\right)}{\pi j^2}\cos(jx).$$
+$$v_N (x) = \frac{\pi}{2}+ \sum_{j=1}^{N-2} \frac{2\left(\cos(j\pi)-1\right)}{\pi j^2}\cos(jx).$$
 Making use of DCT-1, evaluate $u_N(x)$ at $x =(k -1)\pi/(N-1)$ for $k =-N +2,...,N$
 and plot $v_N (x)$ against $x$ for different values of $N$.
 
