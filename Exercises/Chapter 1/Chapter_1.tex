@@ -5,7 +5,7 @@
 
 \title{An Introduction to Computational Stochastic PDEs\\ Exercises: Chapter 1}
 \author{Chris DuPre }
-\date{April 2024}
+\date{September 2024}
 
 \theoremstyle{plain}
 \newtheorem{thm}{Theorem}[section]
@@ -580,6 +580,7 @@ This directly matches the definition of $J_0\left(r\|\lambda\|\right)$ and prove
 \end{proof}
 This is again the DFT of a vector with a $\frac{i}{2}$ in the $j+1$-coordinate and a $\frac{-i}{2}$ in the $2N+1-j$-th coordinate. Writing $\overrightarrow{x}$ as $[x_0,...,x_{N-1}]$ in the forward order and $\overleftarrow{x}$ as the same vector in the reversed order, we have 
 $$\text{DST-1}\left(\overrightarrow{x}\right) = \frac{i}{2}\text{FFT}\left([0,\overrightarrow{x},0,-\overleftarrow{x}]\right)[1:N+1].$$
+For implementation, please refer to Problem\_27.ipynb.
 \begin{exer}
     Define the truncated series for (1.37) in \cite{lord2014introduction} by
 $$u_N (x) = \sum_{j=1}^N \frac{2\left(-1\right)^{j+1}}{j}\sin(jx).$$
@@ -591,7 +592,7 @@ and plot $v_N (x)$ against $x$ for different values of $N$.
 
 \end{exer}
 \begin{proof}
-    \tcr{Still to prove and code}
+    For plots, please refer to Problem\_28.ipnb. 
 \end{proof}
 
 \printbibliography
