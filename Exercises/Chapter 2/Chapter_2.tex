@@ -98,7 +98,8 @@ In particular, this applies for $u = u_1-u_2.$ Thus $\|u_1-u_2\|_{E} = 0.$ By eq
     Fix the coefficients $p=1$ and $q=1.$ Using Algorithms $2.1$ and $2.2$, investigate the condition number of the matrices $A,K$ and $M$ on the finite element mesh width $h$.
 \end{exer}
 \begin{proof}
-    \tcr{Still to prove}
+    See Problem\_5.ipynb for a more thorough write-up, but roughly the condition number $\kappa$ of $M$ grows like $4-n_e^{-2}$ and the condition number of $K,A$ grow like $n_e^2.$
+    \tcr{Include Pictures}
 \end{proof}
 
 \begin{exer}
@@ -165,7 +166,7 @@ In particular, this applies for $u = u_1-u_2.$ Thus $\|u_1-u_2\|_{E} = 0.$ By eq
 \end{proof}
 
 \begin{exer}
-    Consider the BVP (2.3) on $D = (0,1)$ with non-homogeneous boundrary conditions $u(0)=\alpha$ and $u(1)=\beta.$ By writing 
+    Consider the BVP (2.3) on $D = (0,1)$ with non-homogeneous boundary conditions $u(0)=\alpha$ and $u(1)=\beta.$ By writing 
     $$u_h(x) = a\phi_0(x) + \sum_{i=1}^{J} u_i \phi_i(x) + \beta \phi_{j+1}(x)$$
     where $\phi_0(x)$ and $\phi_{J+1}(x)$ are the hat functions associated with $x=0$ and $x=1$ respectively, derive the linear system $A\mathbf{u} = \hat{\mathbf{b}}$ to be solved for the interior values $u_i = u_h (z_i), i = 1,...,J.$ Relate this linear system to the one obtained for homogeneous conditions. Edit algorithm 2.1 and compute the finite element approximation to $(2.3)$ with the boundary conditions $u(0)=1$ and $u(1)=0$, for $p=1, q=10$ and $f=1.$
 \end{exer}
