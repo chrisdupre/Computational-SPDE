@@ -140,7 +140,7 @@ def oned_linear_FEM_Dirichlet(ne:int,
     #Impose homogenous boundrary conditions
     A = K+M
     modified_b = b-left_val*A.getcol(0).todense().flatten()-right_val*A.getcol(-1).todense().flatten()
-    u_int = sp.sparse.linalg.solve(A[1:-1,1:-1],modified_b[1:-1])
+    u_int = np.linalg.solve(A[1:-1,1:-1].todense(),modified_b[1:-1])
     u = np.zeros(nvtx)
     u[1:-1] = u_int
     u[0] = left_val

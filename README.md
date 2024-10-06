@@ -5,5 +5,6 @@ Ch.1
   Need to implement code in examples for shared functions. 
 
 Ch.2 
-  Still need to do 2.4, 2.5, then up to 2.7
-  
+  Still need to do 2.4,
+  Include Pictures on 2.5 and 2.9 
+  Implement 2D FEM Equations for Later
