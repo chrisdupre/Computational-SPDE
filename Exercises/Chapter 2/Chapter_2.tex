@@ -171,7 +171,84 @@ In particular, this applies for $u = u_1-u_2.$ Thus $\|u_1-u_2\|_{E} = 0.$ By eq
     where $\phi_0(x)$ and $\phi_{J+1}(x)$ are the hat functions associated with $x=0$ and $x=1$ respectively, derive the linear system $A\mathbf{u} = \hat{\mathbf{b}}$ to be solved for the interior values $u_i = u_h (z_i), i = 1,...,J.$ Relate this linear system to the one obtained for homogeneous conditions. Edit algorithm 2.1 and compute the finite element approximation to $(2.3)$ with the boundary conditions $u(0)=1$ and $u(1)=0$, for $p=1, q=10$ and $f=1.$
 \end{exer}
 \begin{proof}
-    \tcr{Still to prove}
+    See Problem\_7.ipnb for a detailed description. Plot of the function below.
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.5\linewidth]{Exercises/Chapter 2/Photos/7_graph.png}
+        \caption{Depiction of the function found by using our modified finite element method. }
+        \label{fig:problem_7}
+    \end{figure}
+\end{proof}
+
+\begin{exer}
+    For the BVP (2.3)–(2.4) on $D = (0, 1)$ with $p = 1, q = 0$, and constant $f$ , show that the Galerkin finite element matrix associated with polynomials of degree $r = 1$ is the tridiagonal matrix
+    $$
+    \begin{pmatrix}
+        2/h & -1/h &  &  & \\
+        -1/h & 2/h & -1/h & & \\
+         &\ddots & \ddots & \ddots & \\
+          & & \ddots & \ddots & -1/h\\
+          & & & -1/h & 2/h
+    \end{pmatrix}.
+    $$
+    Hence, determine that the finite element approximation is equivalent to a centred finite difference approximation.
+\end{exer}
+\begin{proof}
+    This is very similar to Problem $6$. Notice that for each element we must compute 
+    $\int_{e_k} \frac{d\phi_k(x)}{dx}^2 dx$ and  $\int_{e_k} \frac{d\phi_k(x)}{dx}^2 dx$. By translation invariance, we only need to compute 
+    \begin{align*}
+        \int_{e_k} \frac{d\phi_k(x)}{dx}^2 dx & = \int_0^h \frac{1}{h}^2 dx  = \frac{1}{h}\\
+        \int_{e_k} \frac{d\phi_k(x)}{dx}\frac{d\phi_{k+1}}{dx} &= \int_0^h \frac{-1}{h}^2 dx  = \frac{-1}{h}.
+    \end{align*}
+    Adding these up give the tri-diagonal structure along the interior. Note we do not need to consider the end points as this problem has Dirichlet boundary conditions. I would like to use this to interpret finite difference methods as a special case of the more general finite element method. 
+\end{proof}
+
+\begin{exer}
+    Algorithm 2.1 uses the Matlab backslash command to solve the piecewise linear Galerkin finite element system $Au = b$. By successively refining the mesh, investigate the efficiency of this solver for the linear systems associated with the BVP in Example 2.31, with respect to the dimension J
+\end{exer}
+\begin{proof}
+    \tcr{Results are not clear. Sure I am making a mistake.}
+\end{proof}
+\begin{exer}
+    By writing $e(x)\vert_{e_k}$ as a Fourier series $e(x)\vert_{e_k} = \sum_{n=1}^\infty a_n \sin\left(\frac{n\pi (x-z_{k-1})}{h}\right)$ in Theorem 2.32 as a Fourier sine series, show that 
+    \begin{align*}
+        \int_{z_{k-1}}^{z_k} e(x)^2 dx & = \frac{h}{2}\sum_{n=1}^\infty \abs{a_n}^2 \\
+         \int_{z_{k-1}}^{z_k} e'(x)^2 dx & = \frac{h}{2}\sum_{n=1}^\infty \left(\frac{n\pi}{h}\right)^2\abs{a_n}^2 \\
+          \int_{z_{k-1}}^{z_k} e''(x)^2 dx & = \frac{h}{2}\sum_{n=1}^\infty \left(\frac{n\pi}{h}\right)^4\abs{a_n}^2.
+    \end{align*}
+    and hence prove (2.43).
+\end{exer}
+\begin{proof}
+    The existence of such a series follows from the fact that $u\in H^2(a,b) \cap H_0^1(a,b)$. As $u-I_h u \in H_0^1(a,b)\cap H^2(a,b)$, all sums that follow exist and are absolutely convergent so we do not need to worry about exchange of sums. 
+    \par Given that such a series exists, we may explicitly compute 
+    \begin{align*}
+        \int_{z_{k-1}}^{z_k} e(x)^2 dx &= \sum_{n=1}^\infty \sum_{m=1}^\infty a_n a_m^* \int_{z_{k-1}}^{z_k} \sin\left(\frac{n\pi (x-z_{k-1})}{h}\right)\sin\left(\frac{m\pi (x-z_{k-1})}{h}\right) dx\\
+        &=  \frac{1}{2}\sum_{n=1}^\infty \sum_{m=1}^\infty a_n a_m^* \int_{z_{k-1}}^{z_k} \cos\left(\frac{(n-m)\pi (x-z_{k-1})}{h}\right) - \cos\left(\frac{(n+m)\pi (x-z_{k-1})}{h}\right) dx.
+    \end{align*}
+    Thus it is sufficient to determine the behaviour of $$\int_{z_{k-1}}^{z_k} \cos\left(\frac{l\pi (x-z_{k-1})}{h}\right) dx, l\in \Z. $$ By direct computation if $l\neq 0$ we have
+    \begin{align*}
+        \int_{z_{k-1}}^{z_k} \cos\left(\frac{l\pi (x-z_{k-1})}{h}\right) dx = \left[\frac{h}{l\pi} \sin\left(\frac{l\pi (x-z_{k-1})}{h}\right)\right]_{z_{k-1}}^{z_k} = \frac{h}{l\pi} \left[\sin(l\pi) - \sin(0)\right] = 0. 
+    \end{align*}
+    If $l= 0$, of course we have the integral is $h$. Thus we have that 
+     \begin{align*}
+        \int_{z_{k-1}}^{z_k} e(x)^2 dx  &=  \frac{1}{2}\sum_{n=1}^\infty \sum_{m=1}^\infty a_n a_m^* h \delta_{m,n} \\
+        &= \frac{h}{z}\sum_{n=1}^{\infty} \abs{a_n}^2.
+    \end{align*}
+    The others follow similarly by noting that the derivative multiplies each term in the sine series by $\frac{n\pi}{h}$ and using a similar orthogonality relation for cosine. 
+\end{proof}
+
+\begin{exer}
+     Let $D = (0, 1)$ and define $e = u − I_h u$ as in Theorem 2.32.
+    \begin{enumerate}[label=\alph*.]
+        \item Use Exercise 1.14(a) and apply a change of variables to show that 
+        $$\int_0^h e(y)^2 dy \leq h^2 \int_0^h  e'(y)^2 dy.$$
+        \item Similarly, show that 
+        $$\int_0^h e'(y)^2 dy \leq h^2 \int_0^h e''(y)^2 dy.$$
+        \item  Hence, prove Theorem 2.32 without using Exercise 2.10. Compare the constant K in your error bound with the one in (2.44).
+    \end{enumerate}
+\end{exer}
+\begin{proof}
+    Note that $e\in H_0^1(0,1)$. Note that $e(x/h) \in H_0^(0,1/h)$ by essentially chain rule or change of variables. Thus we may apply 
 \end{proof}
 
 \printbibliography
