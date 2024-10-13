@@ -148,6 +148,72 @@ def oned_linear_FEM_Dirichlet(ne:int,
 
     return xx, u
 
+def uniform_mesh_info(num_squares:int,
+                      a:float = 0,
+                      b:float = 1
+                      )-> Tuple[np.array,np.array,
+                                np.ndarray,int,
+                                int,float]:
+    """
+    Generates a uniform mesh on the 
+    square
+        [a,b]\times [a,b]
+    
+    Parameters:
+    -----------
+    num_squares:int
+        Will generate num_squares^2 total
+        squares. Input this way so the user 
+        doesn't have to check their input is
+        square. 
+    a:float
+        Left end point of interval. Default is 0
+    b: float
+        Right end point of interval. Default is 1. 
+
+    Returns:
+    --------
+    xv: np.array
+        Array of x coordinates
+    yv: np.array
+        Array of y coordinates
+    elt2vert: np.ndarray
+        Array where the i-th row are 
+        the labels of the vertices for the
+        i-th element
+    nvtx: int
+        Number of vertices
+    ne: int
+        Number of elements
+    h: float
+        Height of uniform mesh
+    """
+    if a>= b:
+        raise ValueError("b must be greater than a.")
+    #Construct grid
+    h = (b-a)/num_squares
+    x = np.arange(a,b+h,h)
+    y = x.copy()
+    xv, yv = np.meshgrid(x,y)
+    xv = xv.flatten()
+    yv = yv.flatten()
+    #Compute Size of Grid Objects
+    nvtx = np.power(num_squares+1,2)
+    ne = 2*np.power(num_squares,2)
+    #Vertex Labels
+    elt2vert = np.zeros((ne,3),dtype=int)
+    vv = np.reshape(range(nvtx),
+                    (num_squares+1,num_squares+1),
+                    order = 'F')
+    v1 = vv[:num_squares,:num_squares].flatten(order='F')
+    v2 = vv[1:,:num_squares].flatten(order='F')
+    v3 = vv[:num_squares,1:].flatten(order='F')
+    elt2vert[:np.power(num_squares,2),:] = np.stack((v1,v2,v3),axis=1)
+    v4 = vv[1:,1:].flatten(order='F')
+    elt2vert[np.power(num_squares,2):,:] = np.stack((v4,v3,v2),axis=1)
+    return xv, yv, elt2vert, nvtx, ne, h 
+
+
     
 
     
