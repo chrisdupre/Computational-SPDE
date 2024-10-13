@@ -249,6 +249,50 @@ In particular, this applies for $u = u_1-u_2.$ Thus $\|u_1-u_2\|_{E} = 0.$ By eq
 \end{exer}
 \begin{proof}
     Note that $e\in H_0^1(0,1)$. Note that $e(x/h) \in H_0^(0,1/h)$ by essentially chain rule or change of variables. Thus we may apply 
+    \begin{enumerate}
+        \item \tcr{Still to Prove}
+        \item \tcr{Still to Prove}
+        \item \tcr{Still to Prove}
+    \end{enumerate}
+\end{proof}
+
+\begin{exer}
+    Modify Algorithm 2.1 and compute the piecewise linear finite element approximation to the solution of the BVP (2.3)–(2.4) with data chosen as in Example 2.5. Compare the approximation with the exact solution at the vertices of the mesh. What do you observe?
+\end{exer}
+\begin{proof}
+    \tcr{Code it all up. Just need to implement the forcing function} 
+\end{proof}
+
+\begin{exer}
+    \begin{enumerate}[label=\alph*.]
+        \item Let $z_k \in [0,1]$ and find the Green's function satisfying 
+        $$-\frac{\partial^2 G(x,z_k)}{\partial x^2 } = \delta(x-z_k)$$
+        and boundary conditions $G(0,z_k) = G(1,z_k) = 0.$
+        \item Let $z_k$ be any vertex of the mesh associated with a piece-wise linear finite element discretization of the BVP in Example 2.5. Use your answer to part (a) to explain your observations in Exercise 2.12.
+    \end{enumerate}
+\end{exer}
+\begin{proof}
+    \begin{enumerate}[label=\alph*.]
+        \item This answer was actually provided in the text of Chapter 1. The answer is 
+        $$G(x,z_k) = \begin{cases}
+            x(1-z_k)& x \leq z_k \\
+            z_k(1-x)& x > z_k 
+        \end{cases}.$$
+        \item \tcr{Compare after completing 12. Notice that this is very similar to a linear finite element mesh.}
+\end{enumerate}
+\end{proof}
+\begin{exer}
+    Let Assumption 2.34 hold. Use the Lax–Milgram Lemma to prove the existence and uniqueness of $u_0 \in V$ satisfying (2.58) and hence prove Theorem 2.42.
+\end{exer}
+\begin{proof}
+    \tcr{Still to prove}
+\end{proof}
+
+\begin{exer}
+    
+\end{exer}
+\begin{proof}
+    
 \end{proof}
 
 \printbibliography
