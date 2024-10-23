@@ -213,7 +213,236 @@ def uniform_mesh_info(num_squares:int,
     elt2vert[np.power(num_squares,2):,:] = np.stack((v4,v3,v2),axis=1)
     return xv, yv, elt2vert, nvtx, ne, h 
 
+def get_jac_info(xv:np.array,
+                 yv:np.array,
+                 ne:int,
+                 elt2vert:np.ndarray
+                 )->Tuple[np.ndarray,
+                          np.ndarray,
+                          np.array]:
+    """
+    Get Jacobian information corresponding
+    to a simple triangulation of [0,1]^2
 
+    Parameters:
+    ------------
+    xv: np.array 
+        Grid of x points
+    yv: np.array
+        Grid of y points
+    ne: int
+        Number of finite elements
+    elt2vert: np.ndarray
+        Maps elements to the three 
+        indices of its corresponding
+        vertices.
+
+    Returns:
+    --------
+    Jks: np.ndarray (ne,2,2)
+        Tensor of Jaobian matrices for 
+        transformation of finite elements 
+        into standard form. 
+    invJks: np.ndarray (ne,2,2)
+        Tensor of inverse Jacobain matries
+        for transformation of finite elements
+        into standard form.
+    detJks: np.array (ne)
+        Array of determinants 
+
+    """
+    #Grab elements corresponding to each finite element
+    [x1,x2,x3] = [xv[elt2vert[:,j]] for j in range(3)]
+    [y1,y2,y3] = [yv[elt2vert[:,j]] for j in range(3)]
+
+    # Compute Jaobian Matrices
+    Jks = np.zeros((ne,2,2))
+    Jks[:,0,0] = x2-x1
+    Jks[:,0,1] = y2-y1
+    Jks[:,1,0] = x3-x1
+    Jks[:,1,1] = y3-y1
+
+    #Compute Determinants 
+    vetorized_det = np.vectorize(np.linalg.det,
+                                 signature="(m,n,k)->(m)")
+    detJks = vetorized_det(Jks)
+
+    #Compute Inverse of Jaobians 
+    invJks = np.zeros((ne,2,2))
+    invJks[:,0,0] = np.multiply((1/detJks),y3-y1)
+    invJks[:,0,1] = np.multiply((1/detJks),y1-y2)
+    invJks[:,1,0] = np.multiply((1/detJks),x1-x3)
+    invJks[:,1,1] = np.multiply((1/detJks),x2-x1)
+
+    return Jks,invJks,detJks
+
+
+def get_elt_arrays2D(xv:np.array,
+                     yv:np.array,
+                     invJks:np.ndarray,
+                     detJks:np.array,
+                     ne:int,
+                     elt2vert:np.ndarray,
+                     a:np.array,
+                     f:np.array
+                     )-> Tuple[np.ndarray,
+                               np.ndarray]:
+    """
+    Parameters:
+    ---------------
+    xv: np.array
+        Array of possible x values
+
+    yv: np.array
+        Array of possible y values
+
+    invJks: np.ndarray
+        Tensor of inverse Jacobian matrices
+
+    detJks: np.array
+        Array of determinant elements
+
+    ne: int
+        Number of finite elements
+
+    el2vert: np.ndarray
+        Array mapping a finite element
+        to the indices of its vertices
+
+    a: np.array
+        Vector of a at every finite element
+
+    f: np.array
+        Vector of f at every finite element
+
+    Returns:
+    ---------
+    Aks: np.ndarray
+        Tensor containing A for each finite element
+        (considering pairs of vertices)
     
+    bks: np.ndarray
+        Array containing the weight vector for each
+        vertex in the finite element
+
+    NOTE: xv,yv,elt2vert are not used. The point is to 
+    keep a consistent signature for when future schema may
+    depend on these elements. This may not be the best
+    approach, but I am sticking with the book's schema
+    until I am sure how I would prefer it.
+    """
+    #Preallocate memory
+    bks = np.zeros((ne,3))
+    Aks = np.zeros((ne,3,3))
+    #Generate gradient matrix
+    dpsi = np.array([[-1,1,0],
+                     [-1,0,1]])
+    for i in range(3):
+        for j in range(3):
+            #Grab Relevant Entrie
+            grad = dpsi[:,[i,j]]
+            #Compute Gradient in usual coordinates
+            v = np.einsum("ijk,kl->ijl",
+                          invJks,grad)
+            #Compute Dot Product
+            integrand = np.sum(np.prod(v,axis=2),
+                               axis=1)
+            #Multiply to form weights
+            Aks[:,i,j] = np.multiply(a,detJks,integrand)/2
+        #Find weight vector
+        bks[:,i] = np.multiply(f,detJks)/6
+
+    return Aks,bks
+
+def twodlinearFEMDirichlet(ns:int,
+                           xv:np.array,
+                           yv:np.array,
+                           elt2vert:np.ndarray,
+                           nvtx:int,
+                           ne:int,
+                           h:float,
+                           a:np.array,
+                           f:np.array,
+                           )->Tuple[np.array,
+                                    np.ndarray,
+                                    np.array]:
+    """
+    Parameters:
+    -----------
+    ns: int
+        Number of squares to provide per side, 
+        produces ns^2 actual squares
+
+    xv: np.array
+        Array of x coordinates per vertex index.
+
+    yv: np.array
+        Array of x coordinates per vertex index.
+
+    elt2vert: np.ndarray
+        Array relating the index of a finite element
+        to the indices of its vertices
+
+    nvtx: int
+        Number of vertices
+
+    ne: int
+        Number of finite elements
+
+    h: float
+        Step size of mesh
+
+    a: np.array
+        Array of a per finite element
+
+    f: np.array
+        Array of forcing term per finite
+        element.
+
+    Returns:
+    --------
+    u_int: np.array
+        Interior solutions
+    
+    A_int: np.ndarray
+        Finite element matrix
+    
+    rhs: np.array
+        Right hand side of solver
+    """
+    Jks, invJks, detJks = get_jac_info(xv = xv,
+                                       yv = yv,
+                                       ne = ne,
+                                       elt2vert = elt2vert)
+    Aks, bks = get_elt_arrays(xv = xv,
+                              yv = yv,
+                              invJks = invJks,
+                              detJks = detJks,
+                              ne = ne,
+                              elt2vert = elt2vert,
+                              a = a,
+                              f = f)
+    
+    A = sp.sparse.lil_array((nvtx,nvtx))
+    b = np.zeros(nvtx)
+    
+    for element in range(ne):
+        rel_indices = elt2vert[element,:]
+        A[rel_indices,rel_indices] += Aks[element,:,:]
+        b[rel_indices] += bks[element,:]
+
+    b_nodes = np.array([index for index in range(nvtx) 
+                        if xv[index]==0 or xv[index]==1
+                        or yv[index]==0 or yv[index]==1])
+    b_interior = np.array([index for index in range(nvtx) 
+                           if index not in b_nodes])
+    
+    A_int = A[b_interior,b_interior]
+    rhs = b[b_interior]
+
+    u_int = np.linalg.solve(A = A_int.todense(),
+                            b=rhs)
+    
+    return u_int, A_int, rhs
 
     
