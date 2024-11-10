@@ -75,8 +75,8 @@ In particular, this applies for $u = u_1-u_2.$ Thus $\|u_1-u_2\|_{E} = 0.$ By eq
     Let Assumption 2.1 in \cite{lord2014introduction} hold. Consider the operator $A$ given by (2.24) and let $G(x,y)$ denote the Green's function satisfying (2.25).
     \begin{enumerate}[label=\alph*.]
         \item Show that 
-        $$G'(x,y_{+}) - G'(x,y_{-}) = \frac{-1}{p(y)},$$
-        where $G'(x,y_{+})$ denotes the limit of $G'(x,y+\varepsilon)$ as $\varepsilon$ approaches $0$ from above and $G'(x,y_{-})$ is the limit as $\varepsilon$ approaches $0$ from below. 
+        $$G'(x,x_{+}) - G'(x,x_{-}) = \frac{-1}{p(x)},$$
+        where $G'(x,x_{+})$ denotes the limit of $G'(x,x+\varepsilon)$ as $\varepsilon$ approaches $0$ from above and $G'(x,x_{-})$ is the limit as $\varepsilon$ approaches $0$ from below. 
         \item Suppose that $u_1,u_2 \in C^{2}([a,b])$ are non-zero functions such that $Au_i = 0$ for $i=1,2$ with $u_1(a)=u_2(b) = 0.$ Show that 
         $$G(x,y) = \begin{cases}
             Cu_1(x)u_2(y) & x\leq y\\
@@ -88,9 +88,31 @@ In particular, this applies for $u = u_1-u_2.$ Thus $\|u_1-u_2\|_{E} = 0.$ By eq
 \end{exer}
 \begin{proof}
     \begin{enumerate}[label=\alph*.]
-        \item \tcr{Still to prove}
-        \item \tcr{Still to prove}
-        \item \tcr{Still to prove}
+        \item To see this, note that by definition of the Green's function we have that 
+        \begin{align*}
+            1 &= -\int_{x-\varepsilon}^{x+\varepsilon} \frac{d}{dx}\left(p(x) G'(x,y)\right) + q(x) G(x,y) dx \\
+            &= -p(x)\left[\frac{p(x+\varepsilon)}{p(x)}G'(x,x+\varepsilon)- \frac{p(x-\varepsilon)}{p(x)}G'(x,x-\varepsilon) \right] +\int_{x-\varepsilon}^{x+\varepsilon} u(x) G(x,y) dx.
+        \end{align*}
+        As $p$ is continuous and $G \in H^2$ the fraction terms tend to one and the integral term vanish respectively. Using the continuity of multiplication and the uniform continuity of $p$ over a compact domain gives
+        \begin{gather*}
+            1 =  -p(x)\left[G'(x,x_{+})- G'(x,x_{-}) \right]\\
+            G'(x,x_{+})- G'(x,x_{-}) = \frac{-1}{p(x)}.
+        \end{gather*}
+        \item As $u_1,u_2$ both satisfy $Au_i = 0$, we claim 
+        $p(x)\left[u_1'(x)u_2(x) - u_1(x)u_2'(x)\right]$ is constant.
+        Thus in particular 
+        $$ u_1(x)u_2'(x)-u_1'(x)u_2(x) = -\frac{p(a)\left[u_1'(a)u_2(a) - u_1(a)u_2'(a)\right]}{p(x)} = -\frac{p(a)u_1'(a)u_2(a)}{p(x)} $$
+        To see this, we take the derivative 
+        \begin{align*}
+            \frac{d}{dx}\left[p(x)\left[u_1'(x)u_2(x) - u_1(x)u_2'(x)\right]\right] &= \frac{d}{dx}\left[p(x)u_1'(x)\right]u_2(x) + p(x)u_1'(x)u_2'(x) \\
+            &- p(x)u_1'(x)u_2'(x) - u_1(x)\frac{d}{dx}\left[p(x)u_2'(x)\right]\\
+            &= u_1(x)q(x)u_2(x) - u_1(x)q(x)u_2(x) = 0.
+        \end{align*}
+        We can then compute $G'(x,x_{+})-G'(x,x_{-})$ explicitly 
+        $$G'(x,x_{+})-G'(x,x_{-}) = C\left[u_2'(x)u_1(x)-u_1'(x)u_2'(x)\right] = -\frac{Cp(a)u_1'(a)u_2(a)}{p(x)}.$$
+        Thus if $C = \frac{1}{p(a)u_1'(a)u_2(a)},$ the jump condition is satisfied. 
+        \item As $u_1,u_2$ are in $C^2$, it is clear that the above form is in $L^2([a,b]).$ To show symmetry, note that if $x<y$ we have that 
+        $$G(y,x) = Cu_2(y)u_1(x) = G(x,y).$$
     \end{enumerate}
 \end{proof}
 
@@ -248,7 +270,7 @@ In particular, this applies for $u = u_1-u_2.$ Thus $\|u_1-u_2\|_{E} = 0.$ By eq
     \end{enumerate}
 \end{exer}
 \begin{proof}
-    Note that $e\in H_0^1(0,1)$. Note that $e(x/h) \in H_0^(0,1/h)$ by essentially chain rule or change of variables. Thus we may apply 
+    Note that $e\in H_0^1(0,1)$. Note that $e(x/h) \in H_0^1(0,1/h)$ by essentially chain rule or change of variables. Thus we may apply 
     \begin{enumerate}
         \item \tcr{Still to Prove}
         \item \tcr{Still to Prove}
@@ -285,7 +307,110 @@ In particular, this applies for $u = u_1-u_2.$ Thus $\|u_1-u_2\|_{E} = 0.$ By eq
     Let Assumption 2.34 hold. Use the Lax–Milgram Lemma to prove the existence and uniqueness of $u_0 \in V$ satisfying (2.58) and hence prove Theorem 2.42.
 \end{exer}
 \begin{proof}
-    \tcr{Still to prove}
+    Under assumption 2.34, the the energy norm induces an inner product on $H_0^1.$ It is also clearly coercive, with an easy lower bound given by $p_0/(1+K)$ where $K$ is the Poincar\'e constant of the domain. It is also bounded as $p,q$ are bounded. $\ell$ is also clearly linear, and bounded by Cauchy-Schwartz. Thus by Lax-Milgram there exists a unique solution.
+\end{proof}
+
+\begin{exer}
+    Solve (2.89) in \cite{lord2014introduction} and hence find the local piece wise linear finite element basis functions $\phi_1^k, \phi_2^k, \phi_3^k$ for an element $\Delta_k$ in two dimensions. Similarly, find the six piecewise quadratic basis functions $\phi_k^i, i = 1,...,6$ associated with r =2 .
+\end{exer}
+\begin{proof}
+    (2.89) in \cite{lord2014introduction} is written as 
+    $$\begin{pmatrix}
+        x_1^k & y_1^k & 1 \\
+        x_2^k & y_2^k & 1 \\
+        x_3^k & y_3^k & 1
+    \end{pmatrix}\begin{pmatrix}
+        a_i\\
+        b_i\\
+        c_i
+    \end{pmatrix} = \mathbf{e}_i.$$
+    This can be found explicitly by finding the inverse of this matrix. We solve this explicitly using Cramer's rule. 
+    \begin{gather*}
+        \text{det}A = x_1^k\left(y_2^k - y_3^k\right)-y_1^k\left(x_2^k-x_3^k\right)+\left(x_2^k y_3^k - x_3^k y_2^k\right) = \mathbf{x}\times \mathbf{y}\cdot \mathbf{1}\\
+        a_i = \frac{\mathbf{\mathbf{e}_i \times \mathbf{y}\cdot \mathbf{1}}}{\mathbf{x}\times \mathbf{y}\cdot \mathbf{1}} = \frac{\mathbf{\mathbf{y}\times \mathbf{1}} \cdot \mathbf{e}_i}{\mathbf{x}\times \mathbf{y}\cdot \mathbf{1}}\\
+        b_i = \frac{\mathbf{\mathbf{x} \times \mathbf{e}_i\cdot \mathbf{1}}}{\mathbf{x}\times \mathbf{y}\cdot \mathbf{1}} = \frac{\mathbf{\mathbf{1}\times \mathbf{x}} \cdot \mathbf{e}_i}{\mathbf{x}\times \mathbf{y}\cdot \mathbf{1}}\\
+        c_i = \frac{\mathbf{\mathbf{x} \times \mathbf{y}\cdot \mathbf{e}_i}}{\mathbf{x}\times \mathbf{y}\cdot \mathbf{1}} 
+    \end{gather*}
+    \par For the quadratic polynomials, we could set up a similar system of equations. However, notice it is sufficient to find six independent polynomials which vanish in the appropriate frame. We will see this is much easier in the standard frame, so for now we will simply note that the mapping can be found in the refernce frame and then translated back by noting
+    $$\begin{bmatrix}
+        x\\y
+    \end{bmatrix}=\begin{bmatrix}
+        x_2^k-x_1^k & x_3^k-x_1^k\\
+        y_2^k -y_1^k & y_3^k-y_3^k
+    \end{bmatrix}\begin{bmatrix}
+        t\\s
+    \end{bmatrix}+\begin{bmatrix}
+        x_1^k\\y_1^k
+    \end{bmatrix}.$$
+    As this mapping is affine, it clearly won't change the polynomial degree.
+\end{proof}
+
+\begin{exer}
+    Show that the local piecewise linear basis functions $\psi_1, \psi_2,\psi_3$ associated with the reference element $\Delta_*$ in Figure 2.15 are given by (2.91) in \cite{lord2014introduction}. Similarly, find the six quadratic reference element basis functions associated with r =2. 
+\end{exer}
+\begin{proof}
+    We can apply the previous theorem using $\mathbf{x} = \begin{bmatrix}
+        0 & 1 & 0
+    \end{bmatrix}, \mathbf{y} = \begin{bmatrix}
+        0 & 0 & 1
+    \end{bmatrix}.$
+    The determinant is then clearly $1$ and 
+    \begin{align*}
+        a_i &= \delta_{i,2}-\delta_{i,1}\\
+        b_i &= \delta_{i,3}-\delta_{i,1}\\
+        c_i &= \delta_{i,1}
+    \end{align*}
+    Applying the definition of $a,b,c$ gives the required results. 
+    \par For the quadratic case, we first focus on the elements based at $(1/2,0),(1/2,1/2),(0,1/2)$. Note these are the essentially only new members. Also, the previous polynomials vanish not just at their assigned points but along the whole line. This we may take their products to get teh required elements:
+    \begin{gather*}
+        \psi_4(s,t) = ct(1-t-s), \phi_4(1/2,0)=1\implies  \psi_4(s,t) = 4t(1-t-s)\\
+        \psi_5(s,t) = cts, \phi_5(1/2,1/2)=1\implies  \psi_5(s,t) = 4ts\\
+        \psi_6(s,t) = cs(1-t-s), \phi_6(0,1/2)=1\implies  \psi_6(s,t) = 4s(1-t-s)
+    \end{gather*}
+    It then suffices to subtract off these values from our original polynomials to obtain the new ones.
+     \begin{align*}
+        \psi_1(s,t) &= t-1/2\psi_4-1/2\psi_5 = t-2t(1-t-s)-2ts=2t^2-t\\
+        \psi_2(s,t) &= 1-t-s- 1/2\psi_4-1/2\psi_6=1-t-s-2t(1-t-s)-2s(1-t-s)\\
+        &=(1-2t-2s)(1-t-s)\\
+        \psi_6(s,t) &= s-1/2\psi_6-1/2\psi_5=s-2s(1-t-s)-2ts=2s^2-s\\
+    \end{align*}
+\end{proof}
+
+\begin{exer}
+    Show that the mapping (2.92)–(2.93) in \cite{lord2014introduction} is affine and show that, for the triangle $\Delta_k$ with vertices $(h,h)$,$(2h,h)$ and $(h,2h)$, the mapping corresponds to a certain shift and scaling of the reference element.
+\end{exer}
+\begin{proof}
+    A mapping is affine if and only if it can be written in the form $Ax+b$ where $A$ is a linear operator. In this case 
+    \begin{gather}
+        \begin{bmatrix}
+            x\\y
+        \end{bmatrix}=\begin{bmatrix}
+            x_2^k-x_1^k & x_3^k-x_1^k\\
+            y_2^k-y_1^k & y_3^k-y_1^k
+        \end{bmatrix}\begin{bmatrix}
+            s\\t
+        \end{bmatrix}+\begin{bmatrix}
+            x_1^k\\y_1^k
+        \end{bmatrix}.
+    \end{gather}
+    Thus the mapping is affine. In the special case mentioned:
+    \begin{gather}
+        \begin{bmatrix}
+            x\\y
+        \end{bmatrix}=\begin{bmatrix}
+            h & 0\\
+            0 & h
+        \end{bmatrix}\begin{bmatrix}
+            s\\t
+        \end{bmatrix}+\begin{bmatrix}
+            h\\h
+        \end{bmatrix} = h\left(\begin{bmatrix}
+            s\\t
+        \end{bmatrix}+\begin{bmatrix}
+            1\\1
+        \end{bmatrix}\right).
+    \end{gather}
+    Thus it is exactly a shift plus a scale by $h$.
 \end{proof}
 
 \begin{exer}
