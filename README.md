@@ -7,6 +7,6 @@ Ch.1
 Ch.2 
   - Include Pictures for 2.5
   - Possible mistake in 2.9 Implementation, need to check
-  - Still to do 2.11, 2.18-2.23
+  - Still to do 2.11, 2.19-2.23
   - Use already implemented functions in 2.12 and 2.13
   
